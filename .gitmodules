@@ -1,0 +1,6 @@
+[submodule "DeadDrop.ui"]
+	path = DeadDrop.ui
+	url = https://github.com/TheMagicNacho/DeadDrop.ui.git
+[submodule "DeadDrop.api"]
+	path = DeadDrop.api
+	url = https://github.com/TheMagicNacho/DeadDrop.api.git
