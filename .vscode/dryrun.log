@@ -1,0 +1,6 @@
+make --dry-run --always-make --keep-going --print-directory
+make: Entering directory '/home/themagicnacho/Documents/dead-drop'
+make: Leaving directory '/home/themagicnacho/Documents/dead-drop'
+ 
+make: *** No targets.  Stop.
+
