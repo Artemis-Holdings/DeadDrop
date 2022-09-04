@@ -1,6 +1,6 @@
 make --dry-run --always-make --keep-going --print-directory
-make: Entering directory '/home/themagicnacho/Documents/dead-drop'
-make: Leaving directory '/home/themagicnacho/Documents/dead-drop'
+make: Entering directory `/Users/sara2in/Desktop/Coding/Personal/dead-drop'
+cd client && yarn install
+cd server && yarn install
+make: Leaving directory `/Users/sara2in/Desktop/Coding/Personal/dead-drop'
  
-make: *** No targets.  Stop.
-
