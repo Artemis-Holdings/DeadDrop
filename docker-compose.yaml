@@ -9,33 +9,30 @@ services:
     ports:
       - "5432:5432"
     environment:
-      - POSTGRES_PASSWORD="docker"
-      - POSTGRES_USER="postgres"
-      - POSTGRES_DB="deaddrop"
-    command: 'postgres'
+      POSTGRES_PASSWORD: docker
+      POSTGRES_USER: postgres
+      POSTGRES_DB: deaddrop
 
   backend:
-    build: DropDead.api/
+    build: DeadDrop.api/
     container_name: 'dead_drop_api'
     ports:
       - '8080:8080'
-    environment:
-      - NODE_ENV="development"
-      - DATABASE_HOST="database"
-      - POSTGRES_PASSWORD="docker"
-      - POSTGRES_USER="postgres"
-      - POSTGRES_PORT="5432"
-      - POSTGRES_DB="deaddrop"
+    # environment:
+    #   - NODE_ENV="development"
+    #   - DATABASE_HOST="database"
+    #   - POSTGRES_PASSWORD="postgres"
+    #   - POSTGRES_USER="postgres"
+    #   - POSTGRES_PORT="5432"
+    #   - POSTGRES_DB="deaddrop"
     depends_on:
       - database
-    # volumes: 
-    #   - '/app/node_modules'
 
   frontend: 
-    build: DropDead.ui/
+    build: DeadDrop.ui/
     container_name: 'dead_drop_ui'
     ports: 
-      - '8000:8000'
+      - '3000:3000'
     depends_on:
       - backend
   
