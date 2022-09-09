@@ -19,6 +19,9 @@ logs: ## Logs the backend
 up: 
 	@docker-compose --file docker-compose.yaml up -d --build
 
+down:
+	@docker-compose down
+
 amends: # ONLY USE DURING PIPELINE WORK. Pushes all current changes via an ammend.
 	@git add -A && git commit --amend --no-edit --no-verify && git push -fu
 
