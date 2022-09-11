@@ -1,0 +1,65 @@
+/* @import url('https://drafts.csswg.org/css-ui-4/'); */
+
+.terminal {
+  background-color: black;
+  color: red;
+  height: 75%;
+  width: 60%;
+  font-family: "Courier New", monospace;
+  font-weight: bold;
+  font-size: 1vw;
+  padding: 20px;
+  overflow-y: auto;
+  scroll-behavior: auto;
+}
+
+.terminalPrompt {
+  width: 100%;
+  border-style: none;
+  outline: none;
+  background-color: black;
+  color: red;
+}
+
+.terminalInput {
+  width: 65%;
+  padding: 0;
+  border-style: none;
+  outline: none;
+  background-color: black;
+  color: red;
+  resize: none;
+  font-size: 1vw;
+  font-weight: bold;
+  float:left;
+  font-family: 'Courier New', Courier, monospace;
+  /* caret-color: rgba(0,0,0,0); */
+}
+
+.userPrompt {
+  float: left;
+  position: relative;
+}
+
+.ascii-logo {
+  font-family: monospace;
+  white-space: pre;
+  color: red;
+  font-size: 1.5vw;
+  /* text-shadow: 0.05rem 0 0.05rem red, -0.125rem 0 0.06rem blue;
+  animation-duration: .1s;
+  animation-name: textflicker;
+  animation-iteration-count: infinite;
+  animation-direction: alternate; */
+}
+/* 
+@keyframes textflicker {
+  from {
+  text-shadow: 1px 0 0 red, -3px 1px 1px blue;
+  opacity: 1;
+  }
+  to {
+  text-shadow: 2px 0.5px 2px red, -2px -0.5px 2px blue;
+  opacity: 0.8;
+  }
+} */

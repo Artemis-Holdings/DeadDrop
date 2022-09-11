@@ -1,0 +1,100 @@
+{
+
+    "init": {
+            "prompt": "Type [m] for message sharing, [f] for file sharing.",
+            "inputHistory": [],
+            "validResponse": ["m", "f"]
+        },
+    "message": [
+        {
+            "prompt": "Would you like to...\n[n] Make a new message.\n[v] View a message.\n [e] Edit a message.\n[c] Change your password.\n[d] Delete a message.",
+            "inputHistory": ["m"],
+            "validResponse": ["n", "v", "e", "c", "d"]
+        },
+        {
+            "prompt": "Please type your desired message",
+            "inputHistory": ["m", "n"],
+            "validResponse": ["msg"]
+        },
+        {
+            "prompt": "Your message has been staged, now enter your desired password",
+            "inputHistory": ["m", "n", "msg"],
+            "validResponse": ["psw"]
+        },
+        {
+            "prompt": "Your password is set, type [s] to send your dead-drop mesage",
+            "inputHistory": ["m", "n", "msg", "psw"],
+            "validResponse": ["s", "sendNewMessage"]
+        },
+        {
+            "prompt": "Encrypting...",
+            "inputHistory": ["m", "n", "msg", "psw", "s"],
+            "validResponse": ["none"]
+        },
+        {
+            "prompt": "Please input the message ID of the message you would like to view",
+            "inputHistory": ["m", "v"],
+            "validResponse": ["msgId"]
+        },
+        {
+            "prompt": "Your message has been staged, please input the correct password",
+            "inputHistory": ["m", "v", "msgId"],
+            "validResponse": ["psw"]
+        },
+        {
+            "prompt": "Your password is set, type [s] to view the dead-drop message",
+            "inputHistory": ["m", "v", "msgId", "psw"],
+            "validResponse": ["s", "sendViewMessage"]
+        },
+        {
+            "prompt": "Decrypting...",
+            "inputHistory": ["m", "v", "msgId", "psw", "s"],
+            "validResponse": ["none"]
+        },
+        {
+            "prompt": "Please input the message ID of the message you would like to delete",
+            "inputHistory": ["m", "d"],
+            "validResponse": ["msgId"]
+        },
+        {
+            "prompt": "Your message has been staged for deletion, please input the correct password",
+            "inputHistory": ["m", "d", "msgId"],
+            "validResponse": ["psw"]
+        },
+        {
+            "prompt": "Password verified, type [s] to delete the dead-drop message",
+            "inputHistory": ["m", "d", "msgId", "psw"],
+            "validResponse": ["s"]
+        },
+        {
+            "prompt": "Deleting...",
+            "inputHistory": ["m", "d", "msgId", "psw", "s"],
+            "validResponse": ["none"]
+        },
+        {
+            "prompt": "Pleases input the message ID of the message you would like to edit",
+            "inputHistory": ["m", "e"],
+            "validResponse": ["msgId"]
+        },
+        {
+            "prompt": "Your message has been staged, please input the correct password",
+            "inputHistory": ["m", "e", "msgId"],
+            "validResponse": ["psw"]
+        },
+        {
+            "prompt": "Password verified, type your new message to update the dead-drop",
+            "inputHistory": ["m", "e", "msgId", "psw"],
+            "validResponse": ["msg"]
+        },
+        {
+            "prompt": "Your updated message has been staged, press [s] to submit.",
+            "inputHistory": ["m", "e", "msgId", "psw", "msg"],
+            "validResponse": ["s"]
+        },
+        {
+            "prompt": "Encrypting message update...",
+            "inputHistory": ["m", "e", "msgId", "psw", "msg", "s"],
+            "validResponse": ["none"]
+        }
+    ]    
+}
