@@ -4,20 +4,20 @@ SHELL := /bin/bash
 setup-initial: client-dep server-dep ## Setup
 
 client-dep: ## Install dependencies
-	@cd DeadDrop.ui && yarn install
+	@cd client && npm install
 
 server-dep: ## Get Go dependencies
-	@cd DeadDrop.api && yarn install
+	@cd server && npm install
 
 # kill-servers:
 # 	@pkill -f bin/shepherd-server || true
 
 logs: ## Logs the backend
-	@docker logs -f shepherd_server
+	@sudo docker logs -f dead_drop_ui
 
 ## Start Docker Containers
 up: 
-	@docker-compose --file docker-compose.yaml up -d --build
+	@sudo docker-compose --file docker-compose.yaml up --build -d 
 
 down:
 	@docker-compose down

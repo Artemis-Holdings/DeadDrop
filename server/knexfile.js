@@ -6,11 +6,10 @@ require("dotenv").config();
 module.exports = {
   development: {
     client: "pg",
+    // TODO: rewrite to use environment variables instead of static strings.
     // connection: process.env.CONNECTION_STRING,
-    connection: "postgres://postgres:docker@dead_drop_db:5432/deaddrop",
-    // migrations: {
-    //   directory: './migrations',
-    // }
+    // connection: "postgres://postgres:docker@dead_drop_db:5432/deaddrop",
+    connection: "postgres://postgres:docker@localhost:5432/deaddrop",
   },
 
   staging: {
@@ -28,6 +27,7 @@ module.exports = {
       tableName: "knex_migrations",
     },
   },
+  // TODO: for production, use RDS or other managed DB
   production: {
     client: 'pg',
     connection: process.env.DATABASE_URL,

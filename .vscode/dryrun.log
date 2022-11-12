@@ -1,6 +1,6 @@
 make --dry-run --always-make --keep-going --print-directory
-make: Entering directory '/home/themagicnacho/dead-drop'
-cd DeadDrop.ui && yarn install
-cd DeadDrop.api && yarn install
-make: Leaving directory '/home/themagicnacho/dead-drop'
+make: Entering directory '/home/themagicnacho/Documents/dead-drop'
+cd client && yarn install
+cd server && yarn install
+make: Leaving directory '/home/themagicnacho/Documents/dead-drop'
  
