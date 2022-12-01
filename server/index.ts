@@ -10,6 +10,27 @@ enum METHOD {
 
 const server = new Server();
 
+interface RouteConfigProps {
+    method: METHOD;
+    path: string;
+}
+
+function routeConfig({method, path}: RouteConfigProps): MethodDecorator {
+    return function (
+        target: Object,
+        propertyKey: string | symbol,
+        descriptor: PropertyDescriptor
+    ) {
+        const response = (req: Request, res: Response) => {
+            const original = descriptor.value(req, res);
+
+            res.status(200).json(original);
+        }
+
+        server.app[method](path, response);
+    }
+}
+
 // Use the routeConfig decorator to establish the route, then use a public method to return the response from the controller to the user.
 /* BASIC PATTERN FOR ROUTES
     @routeConfig({
@@ -56,25 +77,5 @@ class Routes {
 
 }
 
-interface RouteConfigProps {
-    method: METHOD;
-    path: string;
-}
-
-function routeConfig({method, path}: RouteConfigProps): MethodDecorator {
-    return function (
-        target: Object,
-        propertyKey: string | symbol,
-        descriptor: PropertyDescriptor
-    ) {
-        const response = (req: Request, res: Response) => {
-            const original = descriptor.value(req, res);
-
-            res.status(200).json(original);
-        }
-
-        server.app[method](path, response);
-    }
-}
 
 server.start();
