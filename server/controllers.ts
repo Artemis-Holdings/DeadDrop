@@ -10,5 +10,21 @@ export class Controllers {
     }
 
 
+    static async asyncTest(req: Request, res: Response): Promise<String> {
+        let timeoutId;
+        try {
+            const result: String | PromiseLike<String> = new Promise((resolve) => {
+                timeoutId = setTimeout(() => {
+                    resolve("After 2 seconds");
+                }, 2000)
+            });
 
+            return await result;
+        } catch (error) {
+            timeoutId && clearTimeout(timeoutId);
+            return "Some error message";
+        }
+    }
+
+    
 }
