@@ -1,5 +1,5 @@
 // Update with your config settings.
-require("dotenv").config();
+// require("dotenv").config();
 /**
  * @type { Object.<string, import("knex").Knex.Config> }
  */
@@ -28,12 +28,12 @@ module.exports = {
     },
   },
   // TODO: for production, use RDS or other managed DB
-  production: {
-    client: 'pg',
-    connection: process.env.DATABASE_URL,
-    charset: 'utf8',  
-    migrations: {
-      directory: './migrations',
-    }
-  }
+  // production: {
+  //   client: 'pg',
+  //   connection: process.env.DATABASE_URL,
+  //   charset: 'utf8',  
+  //   migrations: {
+  //     directory: './migrations',
+  //   }
+  // }
 };

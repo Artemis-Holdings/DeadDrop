@@ -3,7 +3,8 @@
 // ref: https://medium.com/zero-equals-false/using-cors-in-express-cac7e29b005b
 
 // IMPORT PACKAGES
-require("dotenv").config();
+// require("dotenv").config();
+const path = require('path');
 const express = require("express");
 const morgan = require("morgan");
 const { hash, compare } = require("bcryptjs");
@@ -27,6 +28,7 @@ app.use(
     createParentPath: true,
   })
 );
+app.use(express.static(path.join(__dirname, ".." ,"client", "build")));
 
 const saltRounds = 12;
 
