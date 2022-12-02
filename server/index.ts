@@ -6,57 +6,37 @@ import { Request, Response } from 'express';
 import { Controllers } from './controllers';
 
 enum REST {
-    GET = 'get',
-    PUT = 'put',
-    POST = 'post',
-    PATCH = 'patch',
-    DELETE = 'delete',
+  GET = 'get',
+  PUT = 'put',
+  POST = 'post',
+  PATCH = 'patch',
+  DELETE = 'delete',
+}
+
+interface RouteConfigProps {
+  method: REST;
+  path: string;
 }
 
 const server = new Server();
+function routeConfig({ method, path }: RouteConfigProps): MethodDecorator {
+  return function (_target: any, _propertyKey: string | symbol, descriptor: PropertyDescriptor) {
+    const response = async (req: Request, res: Response) => {
+      try {
+        const original = await descriptor.value(req, res);
 
-interface RouteConfigProps {
-    method: REST;
-    path: string;
-}
+        res.status(200).json(original);
+      } catch (e: any) {
+        res.status(500).json({
+          message: 'Some error occurred',
+          error: e.message,
+          stack: e.stack,
+        });
+      }
+    };
 
-// function routeConfig({method, path}: RouteConfigProps): MethodDecorator {
-//     return function (
-//         target: Object,
-//         propertyKey: string | symbol,
-//         descriptor: PropertyDescriptor
-//     ) {
-//         const response = (req: Request, res: Response) => {
-//             const original = descriptor.value(req, res);
-
-//             res.status(200).json(original);
-//         }
-
-//         server.app[method](path, response);
-//     }
-// }
-function routeConfig({method, path}: RouteConfigProps): MethodDecorator {
-    return function (
-        target: Object,
-        propertyKey: string | symbol,
-        descriptor: PropertyDescriptor
-    ) {
-        const response = async (req: Request, res: Response) => {
-            try {
-                const original = await descriptor.value(req, res);
-
-                res.status(200).json(original);
-            } catch (e: any) {
-                res.status(500).json({
-                    message: "Some error occurred",
-                    error: e.message,
-                    stack: e.stack,
-                });
-            }
-        }
-
-        server.app[method](path, response);
-    }
+    server.app[method](path, response);
+  };
 }
 
 // Use the routeConfig decorator to establish the route, then use a public method to return the response from the controller to the user.
@@ -70,40 +50,13 @@ function routeConfig({method, path}: RouteConfigProps): MethodDecorator {
     }
  */
 class Routes {
-    @routeConfig({
-        method: REST.GET,
-        path: "/"
-    })
-    public root(req: Request, res: Response) {
-        return Controllers.availabilityTest(req, res);
-    }
-
-
-
-
-    @routeConfig({
-        method: REST.POST,
-        path: "/async"
-    })
-    public async asyncTest(req: Request, res: Response) {
-        // let timeoutId;
-        // try {
-        //     const result = new Promise((resolve) => {
-        //         timeoutId = setTimeout(() => {
-        //             resolve("After 2 seconds");
-        //         }, 2000)
-        //     });
-
-        //     return await result;
-        // } catch (error) {
-        //     timeoutId && clearTimeout(timeoutId);
-        //     return "Some error message";
-        // }
-        return Controllers.asyncTest(req, res);
-    }
-        
-
+  @routeConfig({
+    method: REST.GET,
+    path: '/',
+  })
+  public async root() {
+    return Controllers.asyncValidation();
+  }
 }
-
 
 server.start();

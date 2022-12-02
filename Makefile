@@ -9,6 +9,9 @@ client-dep: ## Install dependencies
 server-dep: ## Get Go dependencies
 	@cd server && npm install
 
+server-lint:
+	@cd server && npx eslint --fix .
+
 # kill-servers:
 # 	@pkill -f bin/shepherd-server || true
 
