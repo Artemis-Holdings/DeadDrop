@@ -15,7 +15,7 @@ export class Server {
   }
 
   private _server!: http.Server;
-  
+
   get server(): http.Server {
     return this._server;
   }

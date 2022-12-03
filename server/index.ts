@@ -2,7 +2,6 @@
 
 import { Server } from './app';
 import { Request, Response } from 'express';
-
 import { Controllers } from './controllers';
 
 enum REST {
@@ -20,6 +19,7 @@ interface RouteConfigProps {
 
 const server = new Server();
 function routeConfig({ method, path }: RouteConfigProps): MethodDecorator {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   return function (_target: any, _propertyKey: string | symbol, descriptor: PropertyDescriptor) {
     const response = async (req: Request, res: Response) => {
       try {
