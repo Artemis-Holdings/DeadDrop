@@ -1,4 +1,5 @@
 import { Request, Response } from 'express';
+import { Service } from './service';
 
 // Controlers manage data and logic.
 export class Controllers {
@@ -19,6 +20,18 @@ export class Controllers {
       return await result;
     } catch (error) {
       timeoutId && clearTimeout(timeoutId);
+      console.log('DeadDrop: Error with async request.');
+      console.error(error);
+      return 'Error';
+    }
+  }
+
+  static async migrate(): Promise<string> {
+    try {
+      return await Service.migrate();
+    } catch (error) {
+      console.log('DeadDrop: Migration Error.');
+      console.error(error);
       return 'Error';
     }
   }

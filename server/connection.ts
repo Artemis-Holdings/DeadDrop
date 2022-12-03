@@ -1,4 +1,3 @@
-import { create } from 'domain';
 import knex from 'knex';
 import { Connection, Request } from 'tedious';
 
@@ -71,15 +70,15 @@ const connection = new Connection(config);
 // Attempt to connect and execute queries if connection goes through
 connection.on('connect', (err) => {
   if (err) {
-    console.log('Could not connect')
+    console.log('Could not connect');
     console.error(err.message);
   } else {
-    console.log('connection sucess')
+    console.log('connection sucess');
     createTable();
 
     // queryDatabase();
   }
-//   connection.close();
+  //   connection.close();
 });
 
 connection.connect();

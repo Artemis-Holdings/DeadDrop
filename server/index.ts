@@ -57,6 +57,14 @@ class Routes {
   public async root() {
     return Controllers.asyncValidation();
   }
+
+  @routeConfig({
+    method: REST.POST,
+    path: '/migrate',
+  })
+  public async migrate() {
+    return Controllers.asyncValidation();
+  }
 }
 
 server.start();

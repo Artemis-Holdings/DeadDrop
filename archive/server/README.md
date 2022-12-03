@@ -1,5 +1,9 @@
 # DeadDrop.api
 
+## data flow
+| index | controller | service | repository |
+
+| migrate | migrate(test) | Generate table creation and schema creation | connect |
 
 ## Security
  - No params. Everything is passed through headers so there is no plain text in the url.
