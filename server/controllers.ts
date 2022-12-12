@@ -1,6 +1,8 @@
 import { Request, Response } from 'express';
 import { Service } from './service';
 
+const service = new Service();
+
 // Controlers manage data and logic.
 export class Controllers {
   // static availabilityTest(req: Request, res: Response): string{
@@ -8,7 +10,7 @@ export class Controllers {
   //     return "Dead-Drop Oneline";
   // }
 
-  static async asyncValidation(): Promise<string> {
+  async asyncValidation(): Promise<string> {
     let timeoutId;
     try {
       const result: string | PromiseLike<string> = new Promise((resolve) => {
@@ -26,13 +28,21 @@ export class Controllers {
     }
   }
 
-  static async migrate(): Promise<string> {
+  async migrate(): Promise<void> {
     try {
-      return await Service.migrate();
+      await service.migrate();
     } catch (error) {
       console.log('DeadDrop: Migration Error.');
       console.error(error);
-      return 'Error';
+    }
+  }
+
+  async drop(): Promise<void> {
+    try {
+      await service.drop();
+    } catch (error) {
+      console.log('DeadDrop: Migration Error.');
+      console.error(error);
     }
   }
 }

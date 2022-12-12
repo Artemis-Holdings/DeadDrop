@@ -32,7 +32,8 @@ export class Server {
     // Required for POST requests
     this._app.use(bodyParser.json());
     this._app.use(bodyParser.urlencoded({ extended: true }));
-    this._app.use(morgan(this.release === 'production' ? 'combined' : this.release));
+    // this._app.use(morgan(this.release === 'production' ? 'combined' : this.release));
+    this._app.use(morgan('dev'));
     // CORS
     this.app.use(function (req, res, next) {
       res.setHeader('Access-Control-Allow-Origin', '*');
