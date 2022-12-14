@@ -1,15 +1,12 @@
 import { Request, Response } from 'express';
-import { Service } from './service';
+import { RequestTicket } from './factory';
+import { Actions } from './interfaces';
+import Service from './service';
 
 const service = new Service();
 
 // Controlers manage data and logic.
 export class Controllers {
-  // static availabilityTest(req: Request, res: Response): string{
-  //     console.log("availablity requested.");
-  //     return "Dead-Drop Oneline";
-  // }
-
   async asyncValidation(): Promise<string> {
     let timeoutId;
     try {
@@ -28,15 +25,36 @@ export class Controllers {
     }
   }
 
-  async migrate(): Promise<void> {
+  async deaddrop(request: RequestTicket): Promise<void> {
     try {
-      await service.migrate();
+      console.log('request from controller: ', request);
+      // Review Actions enum in interface file.
+      switch (Number(Actions[request.action])) {
+        case 1: // new message
+          console.log('message');
+          break;
+        case 2: // change password
+          console.log('password');
+          break;
+        case 3: // change title
+          console.log('new title');
+          break;
+        case 4: // read previous message
+          console.log('read only');
+          break;
+        case 5: // create an entirely new dead drop
+          console.log('new dead drop');
+          break;
+        default:
+          console.log('malformed request');
+      }
     } catch (error) {
-      console.log('DeadDrop: Migration Error.');
+      console.log('DeadDrop: Objective Error.');
       console.error(error);
     }
   }
 
+  // TODO: Remove this paragraph prior to deployment.
   async drop(): Promise<void> {
     try {
       await service.drop();

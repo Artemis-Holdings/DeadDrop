@@ -6,11 +6,11 @@ const SqlFieldsQuery = IgniteClient.SqlFieldsQuery;
 const ObjectType = IgniteClient.ObjectType;
 const SqlQuery = IgniteClient.SqlQuery;
 
-const endpoint = '20.7.84.20:10800';
+const endpoint = '127.0.0.1:10800';
 const cacheName = 'DEAD_DROP';
 
 // TODO: Add authentication to DB from adapter.
-export class IgniteAdaptor {
+export default class IgniteAdaptor {
   async read(query: string): Promise<void> {
     try {
       const igniteClient = new IgniteClient(this.onStateChange.bind(this));
@@ -20,7 +20,7 @@ export class IgniteAdaptor {
       const conditionedQuery = new SqlFieldsQuery(query);
       const cursor = await igniteCache.query(conditionedQuery);
       await cursor.getAll().then(() => {
-        console.log('query complete: ');
+        // console.log('query complete: ');
       });
     } catch (error: unknown) {
       console.warn('DeadDrop: Query Error within adaptor.');
@@ -37,7 +37,7 @@ export class IgniteAdaptor {
       const cache = await igniteClient.getOrCreateCache(cacheName, new CacheConfiguration().setSqlSchema('PUBLIC'));
 
       (await cache.query(new SqlFieldsQuery(query))).getAll().then(() => {
-        console.log('query complete');
+        // console.log('query complete');
       });
     } catch (error: unknown) {
       console.warn('DeadDrop: Query Error within adaptor.');

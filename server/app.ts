@@ -1,8 +1,8 @@
 // This initiallizes the server as an application.
-
 import * as http from 'http';
 import express, { Express } from 'express';
 import bodyParser from 'body-parser';
+import Service from './service';
 
 import morgan from 'morgan';
 
@@ -48,6 +48,11 @@ export class Server {
   }
 
   public start() {
+    try {
+      Service.migratePrimary();
+    } catch {
+      console.warn('DeadDrop: Unable to migrate DB.');
+    }
     this._server = this._app.listen(this._app.get('port'), () => {
       console.log('☠️ DEAD-DROP SERVER // Listening to port ', this._app.get('port'));
       console.log('🚀 RELEASE: ', this.release);
