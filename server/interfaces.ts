@@ -13,7 +13,7 @@ interface IKnexConfigDeployment {
 }
 
 export class KnexConfig implements IKnexConfig {
-  client = 'sqlite3';
+  client = 'pg';
   connection = {
     database: '',
     user: '',
@@ -21,16 +21,20 @@ export class KnexConfig implements IKnexConfig {
   } as IKnexConfigDeployment;
 }
 
+// The reason we use the action code to number translation is for ease of update in furture releases.
+// New actions can be modified here, and a new switch is added on the controller.
+// This reduces the overhead.
 export enum Actions {
   MSG = 1, // edit message
   PSW = 2, // change password
   TITLE = 3, // edit title
   READ = 4, // read only
-  NEW = 5, // create a dead drop
+  CREATE = 5, // create a dead drop
+  DELETE = 6, // delete a dead drop
 }
 
 export interface IUserRequest {
-  id: Promise<string> | string;
+  id?: Promise<string> | string;
   title: string;
   password: string;
   payload: string;
@@ -38,8 +42,18 @@ export interface IUserRequest {
 }
 
 export interface IDeadDrop {
+  id: string;
   title: string;
   message: string;
   createdAt: Date;
   updatedAt: Date;
+}
+
+export interface IRepository {
+  id_local?: string;
+  id_dd: string | Promise<string>;
+  pass_hash: string;
+  payload: string;
+  created_at: Date;
+  updated_at: Date;
 }

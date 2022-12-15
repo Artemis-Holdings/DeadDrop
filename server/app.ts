@@ -50,13 +50,14 @@ export class Server {
   public start() {
     try {
       Service.migratePrimary();
+
+      this._server = this._app.listen(this._app.get('port'), () => {
+        console.log('☠️ DEAD-DROP SERVER // Listening to port ', this._app.get('port'));
+        console.log('🚀 RELEASE: ', this.release);
+        console.log(' /// Start Logs /// ');
+      });
     } catch {
       console.warn('DeadDrop: Unable to migrate DB.');
     }
-    this._server = this._app.listen(this._app.get('port'), () => {
-      console.log('☠️ DEAD-DROP SERVER // Listening to port ', this._app.get('port'));
-      console.log('🚀 RELEASE: ', this.release);
-      console.log(' /// Start Logs /// ');
-    });
   }
 }

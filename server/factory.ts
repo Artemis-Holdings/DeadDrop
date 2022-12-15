@@ -8,8 +8,9 @@ const inputEncoding = 'utf-8';
 const storageEncoding = 'hex';
 
 class Cryptogropher {
-  algorithm = 'aes-192.cbc';
+  algorithm = 'aes-192-cbc';
   buffer = Buffer.alloc(16, 0);
+  // TODO: once we validate that encryption works, try to use the bcrypt salt generator.
   salt = 'salt';
   keyLength = 24;
   inputEncodingS = 'utf-8';
@@ -79,10 +80,10 @@ class Cryptogropher {
 }
 
 export class RequestTicket extends Cryptogropher implements IUserRequest {
-  action: Actions;
-  title: string;
-  password: string;
-  payload: string;
+  action!: Actions;
+  title!: string;
+  password!: string;
+  payload!: string;
   id: Promise<string> | string;
 
   constructor(action: Actions, title: string, password: string, payload: string) {

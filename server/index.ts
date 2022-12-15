@@ -4,7 +4,7 @@ import { Server } from './app';
 import { Request, Response } from 'express';
 import { Controllers } from './controllers';
 import { RequestTicket } from './factory';
-import { Actions } from './interfaces';
+import { Actions, IUserRequest } from './interfaces';
 enum REST {
   GET = 'get',
   PUT = 'put',
@@ -59,18 +59,24 @@ export class Routes {
   })
   public async deaddrop(req: Request, res: Response) {
     try {
-      const action = req.headers.action as unknown as Actions;
-      const payload = req.headers.payload as string;
-      const title = req.headers.title as string;
-      const password = req.headers.password as string;
+      const ticket: IUserRequest = {
+        action: req.headers.action as unknown as Actions,
+        title: req.headers.title as string,
+        payload: req.headers.payload as string,
+        password: req.headers.password as string,
+      };
+      const values = Object.values(ticket);
 
-      const request = new RequestTicket(action, title, password, payload);
-      // request.idGenerator(title).then((generatedId: string): void => {
-      //   request.id = generatedId;
-      //   controller.deaddrop(request);
-      // });
-
-      controller.deaddrop(request);
+      if (values.includes(undefined)) {
+        res.status(406).json({
+          message: 'Malformed headder',
+          error: 'All requests must contain: action, title, payload, and password.',
+          stack: 'Not Applicable',
+        });
+      } else {
+        const request = new RequestTicket(ticket.action, ticket.title, ticket.password, ticket.payload);
+        controller.deaddrop(request, res);
+      }
     } catch (error: any) {
       res.status(501).json({
         message: 'Server cannot accept the client request.',

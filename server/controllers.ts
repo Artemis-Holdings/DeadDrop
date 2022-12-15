@@ -1,9 +1,10 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Request, Response } from 'express';
 import { RequestTicket } from './factory';
 import { Actions } from './interfaces';
 import Service from './service';
 
-const service = new Service();
+// const service = new Service();
 
 // Controlers manage data and logic.
 export class Controllers {
@@ -25,11 +26,10 @@ export class Controllers {
     }
   }
 
-  async deaddrop(request: RequestTicket): Promise<void> {
+  async deaddrop(requestTicket: RequestTicket, res: Response): Promise<void> {
     try {
-      console.log('request from controller: ', request);
       // Review Actions enum in interface file.
-      switch (Number(Actions[request.action])) {
+      switch (Number(Actions[requestTicket.action])) {
         case 1: // new message
           console.log('message');
           break;
@@ -43,21 +43,35 @@ export class Controllers {
           console.log('read only');
           break;
         case 5: // create an entirely new dead drop
-          console.log('new dead drop');
+          requestTicket.encrypter(requestTicket.payload, requestTicket.password).then((encryptedPayload) => {
+            requestTicket.payload = encryptedPayload;
+            requestTicket.hasher(requestTicket.password).then((hashedPassword) => {
+              requestTicket.password = hashedPassword;
+              Service.newDeadDrop(requestTicket);
+            });
+          });
+          break;
+        case 6: // create an entirely new dead drop
+          console.log('delete dead drop');
           break;
         default:
           console.log('malformed request');
       }
-    } catch (error) {
+    } catch (error: any) {
       console.log('DeadDrop: Objective Error.');
       console.error(error);
+      res.status(501).json({
+        message: 'Server cannot accept the client request.',
+        error: error.message,
+        stack: error.stack,
+      });
     }
   }
 
   // TODO: Remove this paragraph prior to deployment.
   async drop(): Promise<void> {
     try {
-      await service.drop();
+      await Service.drop();
     } catch (error) {
       console.log('DeadDrop: Migration Error.');
       console.error(error);

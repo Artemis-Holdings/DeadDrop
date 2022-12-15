@@ -1,16 +1,133 @@
 import IgniteClient from 'apache-ignite-client';
+import pg from 'pg';
+import { Client } from 'pg';
 
+export class PostgresAdapter {
+  connectionObject: { host: string; port: number; user: string; password: string; database: string };
+  bootstrapObject: { host: string; port: number; user: string; password: string };
+  pool: pg.Pool;
+
+  constructor() {
+    this.connectionObject = {
+      host: 'localhost',
+      port: 5432,
+      user: 'postgres',
+      password: 'postgres',
+      database: 'dead_drop',
+    };
+
+    this.bootstrapObject = {
+      host: 'localhost',
+      port: 5432,
+      user: 'postgres',
+      password: 'postgres',
+    };
+
+    this.pool = new pg.Pool(this.connectionObject);
+  }
+
+  public async read(query: string) {
+    try {
+      return new Promise((resolve) => {
+        this.pool
+          .query(query)
+          .then((answer) => {
+            resolve(answer);
+          })
+          .catch((error) => {
+            console.error('Error: ', error);
+            resolve(error);
+          });
+      });
+    } catch {
+      return new Promise((resolve) => {
+        resolve(false);
+      });
+    }
+  }
+
+  // returns pass or fail boolean
+  public async write(query: string): Promise<boolean> {
+    try {
+      return new Promise((resolve) => {
+        this.pool
+          .query(query)
+          .then(() => {
+            resolve(true);
+          })
+          .catch((error) => {
+            console.error('Error: ', error);
+            resolve(false);
+          });
+      });
+    } catch {
+      return new Promise((resolve) => {
+        resolve(false);
+      });
+    }
+  }
+
+  public async migrate(query: string) {
+    try {
+      this.bootstrap().then(() => {
+        this.createTable(query);
+      });
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (error: any) {
+      console.log('Catastrophic failiure.');
+      console.error(error);
+    }
+  }
+
+  private async createTable(query: string): Promise<boolean> {
+    const bootstrap = new pg.Client(this.connectionObject);
+    bootstrap.connect();
+
+    return new Promise((resolve) => {
+      bootstrap
+        .query(query)
+        .then(() => {
+          console.log('DeadDrop: Adapter created table created.');
+          resolve(true);
+        })
+        .catch(() => {
+          console.log('DeadDrop: Adapter found table already existed.');
+          resolve(false);
+        })
+        .then(() => bootstrap.end());
+    });
+  }
+
+  private async bootstrap(): Promise<boolean> {
+    const bootstrap = new pg.Client(this.bootstrapObject);
+    bootstrap.connect();
+
+    return new Promise((resolve) => {
+      bootstrap
+        .query(`CREATE DATABASE ${this.connectionObject.database};`)
+        .then(() => {
+          console.log(`DeadDrop: Adapter created DB titled ${this.connectionObject.database}`);
+          resolve(true);
+        })
+        .catch(() => {
+          console.log(`DeadDrop: Adapter found an existing DB called ${this.connectionObject.database}`);
+          resolve(false);
+        })
+        .then(() => bootstrap.end());
+    });
+  }
+}
+
+// IGNITE
 const IgniteClientConfiguration = IgniteClient.IgniteClientConfiguration;
 const CacheConfiguration = IgniteClient.CacheConfiguration;
 const SqlFieldsQuery = IgniteClient.SqlFieldsQuery;
 const ObjectType = IgniteClient.ObjectType;
 const SqlQuery = IgniteClient.SqlQuery;
-
 const endpoint = '127.0.0.1:10800';
 const cacheName = 'DEAD_DROP';
-
 // TODO: Add authentication to DB from adapter.
-export default class IgniteAdaptor {
+export class IgniteAdaptor {
   async read(query: string): Promise<void> {
     try {
       const igniteClient = new IgniteClient(this.onStateChange.bind(this));

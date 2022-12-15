@@ -1,46 +1,54 @@
-import IgniteAdaptor from './adapter';
-import { KnexConfig } from './interfaces';
+import { PostgresAdapter } from './adapter';
+import { IRepository, KnexConfig } from './interfaces';
 import knex from 'knex';
+import { RequestTicket } from './factory';
+import { request } from 'http';
+import { randomUUID } from 'crypto';
 
-const knexConfig = new KnexConfig();
-const adapter = new IgniteAdaptor();
-
-const orm = knex(knexConfig);
+const adapter = new PostgresAdapter();
+const orm = knex(new KnexConfig());
 
 export default class Service {
+  static async newDeadDrop(requestTicket: RequestTicket): Promise<void> {
+    const repository: IRepository = {
+      id_local: randomUUID(),
+      id_dd: requestTicket.id,
+      pass_hash: requestTicket.password,
+      payload: requestTicket.password,
+      created_at: new Date(),
+      updated_at: new Date(),
+    };
+
+    const query: string = orm('dead_drop').insert(repository).toString();
+    adapter.write(query).then(async (passState: boolean) => {
+      if (passState){
+
+        const readQ: string = orm.select('payload').from('dead_drop').where('id_dd', requestTicket.id).toString();
+        const x = await adapter.read(readQ);
+        console.log('read response:  ', x);
+      }
+    });
+  }
+
   static async migratePrimary(): Promise<void> {
     const query: string = orm.schema
       .createTable('dead_drop', (table) => {
         table.uuid('id_local').primary();
         table.string('id_dd');
         table.string('pass_hash');
-        table.text('message');
+        table.text('payload');
         table.timestamp('created_at');
         table.timestamp('updated_at');
       })
       .toString();
-    console.log('migrate query: ', query);
-    adapter.create(query);
+    adapter.migrate(query);
   }
-  // static async migrateMessage(): Promise<void> {
-  //   const query: string = orm.schema
-  //     .createTable('messages', (table) => {
-  //       table.uuid('id_local').primary();
-  //       table.text('message');
-  //       table.string('id_dd').references('id_dd');
-  //       table.timestamp('created_at');
-  //       table.timestamp('updated_at');
-  //     })
-  //     .toString();
-  //   adapter.create(query);
-  // }
 
-  async drop(): Promise<void> {
+  static async drop(): Promise<void> {
     const queryDD: string = orm.schema.dropTableIfExists('dead_drop').toString();
 
-    const queryMS: string = orm.schema.dropTableIfExists('messages').toString();
     // console.log('delete query: ', query);
     adapter.read(queryDD);
-    adapter.read(queryMS);
+    // adapter.read(queryMS);
   }
 }
