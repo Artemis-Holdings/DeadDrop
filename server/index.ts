@@ -74,6 +74,7 @@ export class Routes {
           stack: 'Not Applicable',
         });
       } else {
+        // TODO: move the RequestTicket object instanciation to the controller and out of index.
         const request = new RequestTicket(ticket.action, ticket.title, ticket.password, ticket.payload);
         controller.deaddrop(request, res);
       }

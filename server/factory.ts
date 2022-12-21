@@ -1,8 +1,9 @@
 import crypto from 'crypto';
 import { Buffer } from 'buffer';
 import bcrypt from 'bcryptjs';
-import { IUserRequest, IDeadDrop, Actions } from './interfaces';
+import { IUserRequest, IDeadDrop, Actions, IRepository } from './interfaces';
 import md5 from 'md5';
+import { resolve } from 'path';
 
 const inputEncoding = 'utf-8';
 const storageEncoding = 'hex';
@@ -13,7 +14,7 @@ class Cryptogropher {
   // TODO: once we validate that encryption works, try to use the bcrypt salt generator.
   salt = 'salt';
   keyLength = 24;
-  inputEncodingS = 'utf-8';
+  //inputEncodingS = 'utf-8';
   saltRounds = 12;
   inputEncoding = 'utf-8';
   storageEncoding = 'hex';
@@ -44,7 +45,8 @@ class Cryptogropher {
           resolve('corupted payload');
         } else {
           const cipher = crypto.createDecipheriv(this.algorithm, key, this.buffer);
-          const decrypted = cipher.update(payload, storageEncoding, inputEncoding) + cipher.final(storageEncoding);
+          // TODO: Error is here. Block length missmatch. I think it has to do with the encoding. Look at the archived encryption methods and try to match them.
+          const decrypted = cipher.update(payload, storageEncoding, inputEncoding) + cipher.final(inputEncoding);
           resolve(decrypted);
         }
       });
@@ -66,16 +68,54 @@ class Cryptogropher {
   }
 
   async validater(stringA: string, stringB: string): Promise<boolean> {
+      console.log('-dev validater arguments: ', stringA, stringB);
     return new Promise<boolean>((resolve) => {
       bcrypt.compare(stringA, stringB, (error: Error, response: boolean) => {
         if (error) {
           console.log('DeadDrop: Hashing Error');
           console.error(error);
         } else {
+            console.log('-dev validater response: ', response);
           resolve(response);
         }
       });
     });
+  }
+}
+
+export class DeadDrop extends Cryptogropher implements IDeadDrop {
+  id: Promise<string> | string;
+  title: string;
+  payload: string;
+  isEncrypted: boolean;
+  createdAt: Date;
+  updatedAt: Date;
+  ticketPassword: string;
+  repositoryHash: string;
+
+  constructor(requestTicket: RequestTicket, repository: IRepository) {
+    super();
+
+    this.id = repository.id_dd;
+    this.title = requestTicket.title;
+    this.payload = repository.payload;
+    this.isEncrypted = true;
+    this.ticketPassword = requestTicket.password;
+    this.repositoryHash = repository.pass_hash;
+    this.createdAt = repository.created_at;
+    this.updatedAt = repository.updated_at;
+  }
+
+  async decryptDeadDrop(password: string): Promise<void> {
+    const isPasswordMatching = await this.validater(password, this.repositoryHash);
+    const deadDropEncryptionState: boolean[] = [this.isEncrypted, isPasswordMatching];
+    
+    if (deadDropEncryptionState.includes(false)) {
+        console.log('DeadDrop-Dev nothing to do');
+    } else {
+      this.payload = await this.decrypter(this.payload, password);
+    }
+
   }
 }
 
@@ -96,5 +136,28 @@ export class RequestTicket extends Cryptogropher implements IUserRequest {
   }
   private idGenerator(title: string): string {
     return md5(title);
+  }
+
+  async encryptTicket(payload: string, password: string): Promise<boolean> {
+    // try {
+    return new Promise<boolean>((resolve) => {
+      try {
+        this.encrypter(payload, password).then((encryptedPayload) => {
+          this.payload = encryptedPayload;
+
+          this.hasher(password).then((hashedPassword) => {
+            this.password = hashedPassword;
+            // console.log('DeadDrop-Dev: Ticket Encrypted');
+            resolve(true);
+          });
+        });
+      } catch (error) {
+        console.log(error);
+        resolve(false);
+      }
+    });
+    // } catch(error) {
+    // throw error;
+    // }
   }
 }

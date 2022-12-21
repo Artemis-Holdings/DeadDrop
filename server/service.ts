@@ -1,14 +1,23 @@
 import { PostgresAdapter } from './adapter';
 import { IRepository, KnexConfig } from './interfaces';
 import knex from 'knex';
-import { RequestTicket } from './factory';
-import { request } from 'http';
+import { RequestTicket, DeadDrop } from './factory';
 import { randomUUID } from 'crypto';
 
 const adapter = new PostgresAdapter();
 const orm = knex(new KnexConfig());
 
 export default class Service {
+  static async readDeadDrop(requestTicket: RequestTicket, password: string): Promise<DeadDrop> {
+    const query: string = orm.select().from<IRepository>('dead_drop').where('id_dd', requestTicket.id).toString();
+
+    const repo = (await adapter.read(query)) as IRepository;
+    const deadDrop = new DeadDrop(requestTicket, repo); 
+    console.log('DeadDrop-Dev DeadDrop Object: ', deadDrop);
+    await deadDrop.decryptDeadDrop(password);
+    return deadDrop;
+  }
+
   static async newDeadDrop(requestTicket: RequestTicket): Promise<void> {
     const repository: IRepository = {
       id_local: randomUUID(),
@@ -21,11 +30,14 @@ export default class Service {
 
     const query: string = orm('dead_drop').insert(repository).toString();
     adapter.write(query).then(async (passState: boolean) => {
-      if (passState){
-
+      if (passState) {
         const readQ: string = orm.select('payload').from('dead_drop').where('id_dd', requestTicket.id).toString();
-        const x = await adapter.read(readQ);
-        console.log('read response:  ', x);
+        // TODO: each successfull write needs to respond back to the client`
+        await adapter.read(readQ);
+        // const x: any = await adapter.read(readQ);
+        // console.log('DeadDrop-Dev: read response:  ', x.rows[0]);
+      } else {
+        console.log('DeadDrop: Database Service error.');
       }
     });
   }

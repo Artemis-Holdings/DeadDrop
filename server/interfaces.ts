@@ -29,7 +29,7 @@ export enum Actions {
   PSW = 2, // change password
   TITLE = 3, // edit title
   READ = 4, // read only
-  CREATE = 5, // create a dead drop
+  WRITE = 5, // create a dead drop
   DELETE = 6, // delete a dead drop
 }
 
@@ -42,9 +42,12 @@ export interface IUserRequest {
 }
 
 export interface IDeadDrop {
-  id: string;
+  id: Promise<string> | string;
   title: string;
-  message: string;
+  payload: string;
+  isEncrypted: boolean;
+  ticketPassword: string;
+  repositoryHash: string;
   createdAt: Date;
   updatedAt: Date;
 }

@@ -1,163 +1,221 @@
 make all --print-data-base --no-builtin-variables --no-builtin-rules --question
-make: *** No rule to make target 'all'.  Stop.
-
-# GNU Make 4.2.1
-# Built for x86_64-pc-linux-gnu
-# Copyright (C) 1988-2016 Free Software Foundation, Inc.
+# GNU Make 4.3
+# Built for x86_64-redhat-linux-gnu
+# Copyright (C) 1988-2020 Free Software Foundation, Inc.
 # License GPLv3+: GNU GPL version 3 or later <http://gnu.org/licenses/gpl.html>
 # This is free software: you are free to change and redistribute it.
 # There is NO WARRANTY, to the extent permitted by law.
 
-# Make data base, printed on Wed Dec 14 10:50:14 2022
+# Make data base, printed on Tue Dec 20 13:16:15 2022
 
 # Variables
 
-# automatic
-<D = $(patsubst %/,%,$(dir $<))
-# automatic
-?F = $(notdir $?)
 # environment
-WSLENV = VSCODE_WSL_EXT_LOCATION/up
+GDK_BACKEND = x11
+# environment
+LC_ALL = C
+# environment
+NO_AT_BRIDGE = 1
+# environment
+POSH_THEME = /home/themagicnacho/.poshthemes/honukai.omp.json
+# environment
+GJS_DEBUG_OUTPUT = stderr
+# environment
+VSCODE_CWD = /home/themagicnacho
+# environment
+NVM_DIR = /home/themagicnacho/.nvm
+# environment
+GDM_LANG = en_US.UTF-8
 # default
-.SHELLFLAGS := -c
-# environment
-NVM_INC = /home/themagicnacho/.nvm/versions/node/v18.2.0/include/node
-# automatic
-?D = $(patsubst %/,%,$(dir $?))
+MAKE_COMMAND := make
 # automatic
 @D = $(patsubst %/,%,$(dir $@))
+# environment
+VSCODE_HANDLES_UNCAUGHT_ERRORS = true
+# default
+.VARIABLES := 
+# environment
+PWD = /home/themagicnacho/Documents/dead-drop
 # automatic
-@F = $(notdir $@)
-# makefile
-CURDIR := /home/themagicnacho/dead-drop
-# makefile (from 'Makefile', line 1)
-SHELL := /bin/bash
+%D = $(patsubst %/,%,$(dir $%))
 # environment
-VSCODE_NLS_CONFIG = {"locale":"en","availableLanguages":{}}
+HOSTNAME = fedora
 # environment
-_ = /home/themagicnacho/.vscode-server/bin/5235c6bb189b60b01b1f49062f4ffa42384f8c91/node
-# makefile (from 'Makefile', line 1)
-MAKEFILE_LIST :=  Makefile
-# 'override' directive
-GNUMAKEFLAGS := 
+MAIL = /var/spool/mail/themagicnacho
 # environment
-XDG_DATA_DIRS = /usr/local/share:/usr/share:/var/lib/snapd/desktop
-# environment
-VSCODE_CWD = /mnt/c/Users/TheMagicNacho/AppData/Local/Programs/Microsoft VS Code
-# default
-MAKE_HOST := x86_64-pc-linux-gnu
-# environment
-PATH = /home/themagicnacho/.vscode-server/bin/5235c6bb189b60b01b1f49062f4ffa42384f8c91/bin/remote-cli:/home/themagicnacho/.rd/bin:/home/themagicnacho/.nvm/versions/node/v18.2.0/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/usr/lib/wsl/lib:/mnt/c/WINDOWS/system32:/mnt/c/WINDOWS:/mnt/c/WINDOWS/System32/Wbem:/mnt/c/WINDOWS/System32/WindowsPowerShell/v1.0/:/mnt/c/WINDOWS/System32/OpenSSH/:/mnt/c/Program Files (x86)/NVIDIA Corporation/PhysX/Common:/mnt/c/Users/TheMagicNacho/AppData/Roaming/nvm:/mnt/c/Program Files/nodejs:/mnt/c/Program Files/Git/cmd:/mnt/c/Program Files (x86)/dotnet-core-uninstall/:/mnt/c/Program Files/dotnet/:/mnt/c/Program Files/GitHub CLI/:/mnt/c/WINDOWS/system32:/mnt/c/WINDOWS:/mnt/c/WINDOWS/System32/Wbem:/mnt/c/WINDOWS/System32/WindowsPowerShell/v1.0/:/mnt/c/WINDOWS/System32/OpenSSH/:/mnt/c/Program Files/Docker/Docker/resources/bin:/mnt/c/Users/TheMagicNacho/AppData/Local/Microsoft/WindowsApps:/mnt/c/Users/TheMagicNacho/AppData/Local/GitHubDesktop/bin:/mnt/c/Users/TheMagicNacho/AppData/Local/Programs/Microsoft VS Code/bin:/mnt/c/Users/TheMagicNacho/AppData/Roaming/nvm:/mnt/c/Program Files/nodejs:/mnt/c/Users/TheMagicNacho/.dotnet/tools:/mnt/c/Users/TheMagicNacho/AppData/Local/Programs/oh-my-posh/bin:/mnt/c/Users/TheMagicNacho/AppData/Local/Programs/Rancher Desktop/resources/resources/win32/bin:/mnt/c/Users/TheMagicNacho/AppData/Local/Programs/Rancher Desktop/resources/resources/linux/bin:/snap/bin:/usr/local/go/bin
-# environment
-XDG_RUNTIME_DIR = /mnt/wslg/runtime-dir
-# environment
-NVM_BIN = /home/themagicnacho/.nvm/versions/node/v18.2.0/bin
-# environment
-ELECTRON_RUN_AS_NODE = 1
-# environment
-VSCODE_IPC_HOOK_CLI = /mnt/wslg/runtime-dir/vscode-ipc-7254f06a-73eb-4324-9ea8-f3601c055ba1.sock
-# default
-.FEATURES := target-specific order-only second-expansion else-if shortest-stem undefine oneshell archives jobserver output-sync check-symlink load
+XDG_DATA_DIRS = /home/themagicnacho/.local/share/flatpak/exports/share:/var/lib/flatpak/exports/share:/usr/local/share/:/usr/share/
+# automatic
+^D = $(patsubst %/,%,$(dir $^))
 # automatic
 %F = $(notdir $%)
 # environment
-DISPLAY = :0
+NVM_INC = /home/themagicnacho/.nvm/versions/node/v16.16.0/include/node
 # environment
-WSL2_GUI_APPS_ENABLED = 1
+VSCODE_CODE_CACHE_PATH = /home/themagicnacho/.config/Code/CachedData/6d9b74a70ca9c7733b29f0456fd8195364076dda
 # environment
-PWD = /home/themagicnacho/dead-drop
+CONDA_PROMPT_MODIFIER = false
+# environment
+LANG = C
+# environment
+XAUTHORITY = /run/user/1000/.mutter-Xwaylandauth.OGLKX1
 # default
 .LOADED := 
+# default
+.INCLUDE_DIRS = /usr/include /usr/local/include /usr/include
+# makefile
+MAKEFLAGS = pqrR
+# makefile
+CURDIR := /home/themagicnacho/Documents/dead-drop
 # environment
-WSL_INTEROP = /run/WSL/6863_interop
+APPLICATION_INSIGHTS_NO_DIAGNOSTIC_CHANNEL = true
 # environment
-PULSE_SERVER = /mnt/wslg/PulseServer
+LESSOPEN = ||/usr/bin/lesspipe.sh %s
+# environment
+POWERLINE_COMMAND = oh-my-posh
+# automatic
+*D = $(patsubst %/,%,$(dir $*))
+# environment
+MFLAGS = -pqrR
+# environment
+SSH_AUTH_SOCK = /run/user/1000/keyring/ssh
+# default
+.SHELLFLAGS := -c
+# environment
+NVM_BIN = /home/themagicnacho/.nvm/versions/node/v16.16.0/bin
+# environment
+WAYLAND_DISPLAY = wayland-0
+# environment
+HISTSIZE = 1000
+# automatic
++D = $(patsubst %/,%,$(dir $+))
+# environment
+XDG_SESSION_DESKTOP = gnome
+# makefile (from 'Makefile', line 1)
+MAKEFILE_LIST := Makefile
+# automatic
+@F = $(notdir $@)
+# environment
+VSCODE_PID = 14810
+# environment
+XDG_SESSION_TYPE = wayland
+# automatic
+?D = $(patsubst %/,%,$(dir $?))
+# environment
+SESSION_MANAGER = local/unix:@/tmp/.ICE-unix/2312,unix/unix:/tmp/.ICE-unix/2312
+# automatic
+*F = $(notdir $*)
+# environment
+CHROME_DESKTOP = code-url-handler.desktop
+# environment
+DBUS_SESSION_BUS_ADDRESS = unix:path=/run/user/1000/bus
+# automatic
+<D = $(patsubst %/,%,$(dir $<))
+# environment
+VSCODE_NLS_CONFIG = {"locale":"en-us","availableLanguages":{},"_languagePackSupport":true}
+# default
+MAKE_HOST := x86_64-redhat-linux-gnu
+# makefile (from 'Makefile', line 1)
+SHELL := /bin/bash
+# default
+MAKECMDGOALS := all
+# environment
+XMODIFIERS = @im=ibus
+# environment
+DENO_INSTALL = ~/.deno
+# environment
+GJS_DEBUG_TOPICS = JS ERROR;JS LOG
+# environment
+SHLVL = 0
+# environment
+MAKELEVEL := 0
+# default
+MAKE = $(MAKE_COMMAND)
+# environment
+PATH = ~/.deno/bin:/home/themagicnacho/.nvm/versions/node/v16.16.0/bin:/home/themagicnacho/.local/bin:/home/themagicnacho/bin:~/.deno/bin:/usr/local/bin:/usr/local/sbin:/usr/bin:/usr/sbin:/usr/local/go/bin:/usr/local/go/bin
+# environment
+MOZ_GMP_PATH = /usr/lib64/mozilla/plugins/gmp-gmpopenh264/system-installed
+# default
+MAKEFILES := 
+# automatic
+^F = $(notdir $^)
+# environment
+INVOCATION_ID = 481aed06d48541858a6bc2dd168b5f4a
+# environment
+USERNAME = themagicnacho
+# environment
+GNOME_SETUP_DISPLAY = :1
+# automatic
+?F = $(notdir $?)
+# environment
+XDG_CURRENT_DESKTOP = GNOME
+# environment
+KDEDIRS = /usr
+# automatic
++F = $(notdir $+)
+# environment
+DESKTOP_SESSION = gnome
+# environment
+ORIGINAL_XDG_CURRENT_DESKTOP = GNOME
+# 'override' directive
+GNUMAKEFLAGS := 
+# environment
+LOGNAME = themagicnacho
+# environment
+GIO_LAUNCHED_DESKTOP_FILE = /usr/share/applications/code.desktop
+# makefile
+.DEFAULT_GOAL := setup-initial
+# environment
+SYSTEMD_EXEC_PID = 2362
+# environment
+HISTCONTROL = ignoredups
+# environment
+EDITOR = /usr/bin/nano
+# environment
+DISPLAY = :0
+# environment
+USER = themagicnacho
+# default
+MAKE_VERSION := 4.3
+# environment
+MANAGERPID = 1976
+# environment
+DEBUGINFOD_URLS = https://debuginfod.fedoraproject.org/ 
+# environment
+GIO_LAUNCHED_DESKTOP_FILE_PID = 14810
+# environment
+_ = /usr/bin/make
+# environment
+XDG_RUNTIME_DIR = /run/user/1000
+# environment
+NVM_CD_FLAGS = 
+# environment
+JOURNAL_STREAM = 8:31339
+# environment
+XDG_SESSION_CLASS = user
 # environment
 VSCODE_AMD_ENTRYPOINT = vs/workbench/api/node/extensionHostProcess
 # environment
 HOME = /home/themagicnacho
 # environment
-POWERLINE_COMMAND = oh-my-posh
+QT_IM_MODULE = ibus
 # environment
-LOGNAME = themagicnacho
+ELECTRON_RUN_AS_NODE = 1
 # environment
-APPLICATION_INSIGHTS_NO_DIAGNOSTIC_CHANNEL = 1
-# environment
-CONDA_PROMPT_MODIFIER = false
-# environment
-NVM_CD_FLAGS = 
-# environment
-VSCODE_HANDLES_UNCAUGHT_ERRORS = true
-# automatic
-^D = $(patsubst %/,%,$(dir $^))
-# environment
-MAKELEVEL := 0
-# default
-MAKE = $(MAKE_COMMAND)
-# default
-MAKECMDGOALS := all
-# environment
-SHLVL = 1
-# environment
-POSH_THEME = /mnt/c/Users/TheMagicNacho/AppData/Local/oh-my-posh/themes/amro.omp.json
-# default
-MAKE_VERSION := 4.2.1
-# environment
-USER = themagicnacho
-# makefile
-.DEFAULT_GOAL := setup-initial
-# environment
-NAME = Windows
-# automatic
-%D = $(patsubst %/,%,$(dir $%))
-# environment
-VSCODE_WSL_EXT_LOCATION = /mnt/c/Users/TheMagicNacho/.vscode/extensions/ms-vscode-remote.remote-wsl-0.72.0
-# default
-MAKE_COMMAND := make
-# default
-.VARIABLES := 
-# automatic
-*F = $(notdir $*)
-# makefile
-MAKEFLAGS = pqrR
-# environment
-MFLAGS = -pqrR
-# automatic
-*D = $(patsubst %/,%,$(dir $*))
-# environment
-NVM_DIR = /home/themagicnacho/.nvm
-# automatic
-+D = $(patsubst %/,%,$(dir $+))
-# automatic
-+F = $(notdir $+)
-# environment
-VSCODE_HANDLES_SIGPIPE = true
-# default
-MAKEFILES := 
-# automatic
-<F = $(notdir $<)
-# environment
-LC_ALL = C
-# environment
-HOSTTYPE = x86_64
-# automatic
-^F = $(notdir $^)
-# default
-SUFFIXES := 
-# environment
-WAYLAND_DISPLAY = wayland-0
-# default
-.INCLUDE_DIRS = /usr/include /usr/local/include /usr/include
+VSCODE_IPC_HOOK = /run/user/1000/vscode-8bed118e-1.70.1-main.sock
 # default
 .RECIPEPREFIX := 
+# automatic
+<F = $(notdir $<)
+# default
+SUFFIXES := 
+# default
+.FEATURES := target-specific order-only second-expansion else-if shortest-stem undefine oneshell nocomment grouped-target extra-prereqs archives jobserver output-sync check-symlink guile load
 # environment
-LANG = C
+XDG_MENU_PREFIX = gnome-
 # environment
-TERM = xterm-256color
-# environment
-WSL_DISTRO_NAME = Ubuntu
+GDMSESSION = gnome
 # variable set hash-table stats:
-# Load=72/1024=7%, Rehash=0, Collisions=4/98=4%
+# Load=102/1024=10%, Rehash=0, Collisions=4/133=3%
 
 # Pattern-specific Variable Values
 
@@ -165,9 +223,9 @@ WSL_DISTRO_NAME = Ubuntu
 
 # Directories
 
-# . (device 2080, inode 1516024): 17 files, no impossibilities.
+# . (device 38, inode 1129227): 15 files, no impossibilities.
 
-# 17 files, no impossibilities in 1 directories.
+# 15 files, no impossibilities in 1 directories.
 
 # Implicit Rules
 
@@ -175,33 +233,19 @@ WSL_DISTRO_NAME = Ubuntu
 
 # Files
 
-amends:
-#  Implicit rule search has not been done.
-#  Modification time never checked.
-#  File has not been updated.
-#  recipe to execute (from 'Makefile', line 29):
-	@git add -A && git commit --amend --no-edit --no-verify && git push -fu
-
-server-lint:
-#  Implicit rule search has not been done.
-#  Modification time never checked.
-#  File has not been updated.
-#  recipe to execute (from 'Makefile', line 13):
-	@cd server && npx eslint --fix .
-
-client-dep:
-#  Implicit rule search has not been done.
-#  Modification time never checked.
-#  File has not been updated.
-#  recipe to execute (from 'Makefile', line 7):
-	@cd client && npm install
-
 # Not a target:
-all:
-#  Command line target.
+Makefile:
 #  Implicit rule search has been done.
-#  File does not exist.
+#  Last modified 2022-12-02 10:15:59.197814016
+#  File has been updated.
+#  Successfully updated.
+
+logs:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
 #  File has not been updated.
+#  recipe to execute (from 'Makefile', line 19):
+	@sudo docker logs -f dead_drop_ui
 
 up:
 #  Implicit rule search has not been done.
@@ -218,16 +262,24 @@ server-dep:
 	@cd server && npm install
 
 # Not a target:
-Makefile:
-#  Implicit rule search has been done.
-#  Last modified 2022-12-01 21:10:21.153394217
-#  File has been updated.
-#  Successfully updated.
-
-setup-initial: client-dep server-dep
+.DEFAULT:
 #  Implicit rule search has not been done.
 #  Modification time never checked.
 #  File has not been updated.
+
+# Not a target:
+all:
+#  Command line target.
+#  Implicit rule search has been done.
+#  File does not exist.
+#  File has not been updated.
+
+server-lint:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+#  recipe to execute (from 'Makefile', line 13):
+	@cd server && npx eslint --fix .
 
 help:
 #  Implicit rule search has not been done.
@@ -236,18 +288,27 @@ help:
 #  recipe to execute (from 'Makefile', line 32):
 	@grep -h -E '^[a-zA-Z0-9_-]+:.*?## .*$$' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-30s\033[0m %s\n", $$1, $$2}'
 
-# Not a target:
-.DEFAULT:
+setup-initial: client-dep server-dep
 #  Implicit rule search has not been done.
 #  Modification time never checked.
+ 
+make: *** No rule to make target 'all'.  Stop.
+
 #  File has not been updated.
 
-logs:
+client-dep:
 #  Implicit rule search has not been done.
 #  Modification time never checked.
 #  File has not been updated.
-#  recipe to execute (from 'Makefile', line 19):
-	@sudo docker logs -f dead_drop_ui
+#  recipe to execute (from 'Makefile', line 7):
+	@cd client && npm install
+
+amends:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+#  recipe to execute (from 'Makefile', line 29):
+	@git add -A && git commit --amend --no-edit --no-verify && git push -fu
 
 down:
 #  Implicit rule search has not been done.
@@ -264,12 +325,12 @@ down:
 
 # No general ('VPATH' variable) search path.
 
-# strcache buffers: 1 (0) / strings = 31 / storage = 277 B / avg = 8 B
-# current buf: size = 8162 B / used = 277 B / count = 31 / avg = 8 B
+# strcache buffers: 1 (0) / strings = 29 / storage = 261 B / avg = 9 B
+# current buf: size = 8162 B / used = 261 B / count = 29 / avg = 9 B
 
-# strcache performance: lookups = 46 / hit rate = 32%
+# strcache performance: lookups = 44 / hit rate = 34%
 # hash-table stats:
-# Load=31/8192=0%, Rehash=0, Collisions=1/46=2%
-# Finished Make data base on Wed Dec 14 10:50:14 2022
+# Load=29/8192=0%, Rehash=0, Collisions=0/44=0%
+# Finished Make data base on Tue Dec 20 13:16:15 2022
 
  

@@ -1,6 +1,7 @@
 import IgniteClient from 'apache-ignite-client';
 import pg from 'pg';
 import { Client } from 'pg';
+import { IRepository } from './interfaces';
 
 export class PostgresAdapter {
   connectionObject: { host: string; port: number; user: string; password: string; database: string };
@@ -26,13 +27,13 @@ export class PostgresAdapter {
     this.pool = new pg.Pool(this.connectionObject);
   }
 
-  public async read(query: string) {
+  public async read(query: string): Promise<unknown> {
     try {
       return new Promise((resolve) => {
         this.pool
           .query(query)
           .then((answer) => {
-            resolve(answer);
+            resolve(answer.rows[0] as unknown);
           })
           .catch((error) => {
             console.error('Error: ', error);
@@ -41,7 +42,8 @@ export class PostgresAdapter {
       });
     } catch {
       return new Promise((resolve) => {
-        resolve(false);
+        const blank = '';
+        resolve(blank);
       });
     }
   }

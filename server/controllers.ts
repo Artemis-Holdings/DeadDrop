@@ -40,15 +40,18 @@ export class Controllers {
           console.log('new title');
           break;
         case 4: // read previous message
-          console.log('read only');
+          const password = requestTicket.password;
+        
+          requestTicket.encryptTicket(requestTicket.payload, requestTicket.password).then(async () => {
+              // TODO: the error is that we are passing a hashed password into the validater. We need to pass the plaintext to the validator as efficently as possible.
+            const deadDrop = await Service.readDeadDrop(requestTicket, password);
+            console.log('dead drop on controller: ', deadDrop);
+            // res.status(200).json(deadDrop);
+          });
           break;
         case 5: // create an entirely new dead drop
-          requestTicket.encrypter(requestTicket.payload, requestTicket.password).then((encryptedPayload) => {
-            requestTicket.payload = encryptedPayload;
-            requestTicket.hasher(requestTicket.password).then((hashedPassword) => {
-              requestTicket.password = hashedPassword;
-              Service.newDeadDrop(requestTicket);
-            });
+          requestTicket.encryptTicket(requestTicket.payload, requestTicket.password).then(() => {
+            Service.newDeadDrop(requestTicket);
           });
           break;
         case 6: // create an entirely new dead drop
