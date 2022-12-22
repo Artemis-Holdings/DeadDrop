@@ -12,7 +12,7 @@ export default class Service {
     const query: string = orm.select().from<IRepository>('dead_drop').where('id_dd', requestTicket.id).toString();
 
     const repo = (await adapter.read(query)) as IRepository;
-    const deadDrop = new DeadDrop(requestTicket, repo); 
+    const deadDrop = new DeadDrop(requestTicket, repo);
     console.log('DeadDrop-Dev DeadDrop Object: ', deadDrop);
     await deadDrop.decryptDeadDrop(password);
     return deadDrop;
@@ -23,7 +23,7 @@ export default class Service {
       id_local: randomUUID(),
       id_dd: requestTicket.id,
       pass_hash: requestTicket.password,
-      payload: requestTicket.password,
+      payload: requestTicket.payload,
       created_at: new Date(),
       updated_at: new Date(),
     };

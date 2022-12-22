@@ -40,17 +40,22 @@ export class Controllers {
           console.log('new title');
           break;
         case 4: // read previous message
+         console.log('plaintext request ticket: ', requestTicket); 
           const password = requestTicket.password;
-        
+
           requestTicket.encryptTicket(requestTicket.payload, requestTicket.password).then(async () => {
-              // TODO: the error is that we are passing a hashed password into the validater. We need to pass the plaintext to the validator as efficently as possible.
+            // TODO: the error is that we are passing a hashed password into the validater. We need to pass the plaintext to the validator as efficently as possible.
+            console.log('deaddrop-dev request ticket: ', requestTicket);
             const deadDrop = await Service.readDeadDrop(requestTicket, password);
             console.log('dead drop on controller: ', deadDrop);
             // res.status(200).json(deadDrop);
           });
           break;
         case 5: // create an entirely new dead drop
+
+         console.log('plaintext request ticket: ', requestTicket); 
           requestTicket.encryptTicket(requestTicket.payload, requestTicket.password).then(() => {
+              console.log('encrypted request ticket: ', requestTicket);
             Service.newDeadDrop(requestTicket);
           });
           break;

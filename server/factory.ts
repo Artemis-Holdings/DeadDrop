@@ -5,57 +5,50 @@ import { IUserRequest, IDeadDrop, Actions, IRepository } from './interfaces';
 import md5 from 'md5';
 import { resolve } from 'path';
 
-const inputEncoding = 'utf-8';
+const inputEncoding = 'utf8';
 const storageEncoding = 'hex';
+const initVector = Buffer.alloc(16, 0);
+const salt = 'salt';
+const algorithm = 'aes-256-cbc';
+const saltRounds = 12;
+const keyLength = 32;
 
 class Cryptogropher {
-  algorithm = 'aes-192-cbc';
-  buffer = Buffer.alloc(16, 0);
   // TODO: once we validate that encryption works, try to use the bcrypt salt generator.
-  salt = 'salt';
-  keyLength = 24;
   //inputEncodingS = 'utf-8';
-  saltRounds = 12;
-  inputEncoding = 'utf-8';
-  storageEncoding = 'hex';
+  //inputEncoding = 'utf8';
+  //storageEncoding = 'hex';
 
   async encrypter(payload: string, password: string): Promise<string> {
-    return new Promise<string>((resolve) => {
-      crypto.scrypt(password, this.salt, this.keyLength, (error: Error | null, key: Buffer) => {
-        if (error) {
-          console.log('DeadDrop: Encryption Error');
-          console.error(error);
-          resolve('corupted payload');
-        } else {
-          const cipher = crypto.createCipheriv(this.algorithm, key, this.buffer);
+    const output = new Promise<string>((resolve) => {
+      crypto.scrypt(password, salt, keyLength, (error: Error | null, key: Buffer) => {
+        const cipher = crypto.createCipheriv(algorithm, key, initVector);
 
-          const encrypted = cipher.update(payload, inputEncoding, storageEncoding) + cipher.final(storageEncoding);
-          resolve(encrypted);
-        }
+        let encrypted = cipher.update(payload, inputEncoding, storageEncoding);
+        encrypted += cipher.final(storageEncoding);
+        resolve(encrypted);
       });
     });
+    return await output;
   }
 
   async decrypter(payload: string, password: string): Promise<string> {
-    return new Promise<string>((resolve) => {
-      crypto.scrypt(password, this.salt, this.keyLength, (error: Error | null, key: Buffer) => {
-        if (error) {
-          console.log('DeadDrop: Decryption Error');
-          console.error(error);
-          resolve('corupted payload');
-        } else {
-          const cipher = crypto.createDecipheriv(this.algorithm, key, this.buffer);
-          // TODO: Error is here. Block length missmatch. I think it has to do with the encoding. Look at the archived encryption methods and try to match them.
-          const decrypted = cipher.update(payload, storageEncoding, inputEncoding) + cipher.final(inputEncoding);
-          resolve(decrypted);
-        }
+    const output = new Promise<string>((resolve) => {
+      crypto.scrypt(password, salt, keyLength, (error: Error | null, key: Buffer) => {
+        const cipher = crypto.createDecipheriv(algorithm, key, initVector);
+        console.log(`Payload: ${payload} // password: ${password} // key: ${key}`);
+
+        let decrypted = cipher.update(payload, storageEncoding, inputEncoding);
+        decrypted += cipher.final(inputEncoding);
+        resolve(decrypted);
       });
     });
+    return await output;
   }
 
   async hasher(input: string): Promise<string> {
     const hash = new Promise<string>((resolve) => {
-      bcrypt.hash(input, this.saltRounds, (error: Error | null, hash: string) => {
+      bcrypt.hash(input, saltRounds, (error: Error | null, hash: string) => {
         if (error) {
           console.log('DeadDrop: Hashing Error');
           console.error(error);
@@ -68,14 +61,12 @@ class Cryptogropher {
   }
 
   async validater(stringA: string, stringB: string): Promise<boolean> {
-      console.log('-dev validater arguments: ', stringA, stringB);
     return new Promise<boolean>((resolve) => {
       bcrypt.compare(stringA, stringB, (error: Error, response: boolean) => {
         if (error) {
           console.log('DeadDrop: Hashing Error');
           console.error(error);
         } else {
-            console.log('-dev validater response: ', response);
           resolve(response);
         }
       });
@@ -109,13 +100,11 @@ export class DeadDrop extends Cryptogropher implements IDeadDrop {
   async decryptDeadDrop(password: string): Promise<void> {
     const isPasswordMatching = await this.validater(password, this.repositoryHash);
     const deadDropEncryptionState: boolean[] = [this.isEncrypted, isPasswordMatching];
-    
+
     if (deadDropEncryptionState.includes(false)) {
-        console.log('DeadDrop-Dev nothing to do');
     } else {
       this.payload = await this.decrypter(this.payload, password);
     }
-
   }
 }
 
@@ -139,7 +128,7 @@ export class RequestTicket extends Cryptogropher implements IUserRequest {
   }
 
   async encryptTicket(payload: string, password: string): Promise<boolean> {
-    // try {
+    try {
     return new Promise<boolean>((resolve) => {
       try {
         this.encrypter(payload, password).then((encryptedPayload) => {
@@ -147,7 +136,6 @@ export class RequestTicket extends Cryptogropher implements IUserRequest {
 
           this.hasher(password).then((hashedPassword) => {
             this.password = hashedPassword;
-            // console.log('DeadDrop-Dev: Ticket Encrypted');
             resolve(true);
           });
         });
@@ -156,8 +144,8 @@ export class RequestTicket extends Cryptogropher implements IUserRequest {
         resolve(false);
       }
     });
-    // } catch(error) {
-    // throw error;
-    // }
+    } catch(error) {
+      throw error;
+    }
   }
 }
