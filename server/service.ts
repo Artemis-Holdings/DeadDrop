@@ -9,11 +9,20 @@ const orm = knex(new KnexConfig());
 
 export default class Service {
   static async readDeadDrop(requestTicket: RequestTicket, password: string): Promise<DeadDrop> {
-    const query: string = orm.select().from<IRepository>('dead_drop').where('id_dd', requestTicket.id).toString();
+    // TODO: See if we can encode a response message with this repo?
+    const repoBlank: IRepository = {
+    id_dd: '', 
+    pass_hash: '',
+    payload: '',
+    created_at: new Date(), 
+    updated_at: new Date()
+    };
 
-    const repo = (await adapter.read(query)) as IRepository;
+    const query: string = orm.select().from<IRepository>('dead_drop').where('id_dd', requestTicket.id).toString();
+    const raw = (await adapter.read(query));
+    const repo = raw ? raw as IRepository : repoBlank;
+
     const deadDrop = new DeadDrop(requestTicket, repo);
-    console.log('DeadDrop-Dev DeadDrop Object: ', deadDrop);
     await deadDrop.decryptDeadDrop(password);
     return deadDrop;
   }

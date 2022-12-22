@@ -36,7 +36,6 @@ class Cryptogropher {
     const output = new Promise<string>((resolve) => {
       crypto.scrypt(password, salt, keyLength, (error: Error | null, key: Buffer) => {
         const cipher = crypto.createDecipheriv(algorithm, key, initVector);
-        console.log(`Payload: ${payload} // password: ${password} // key: ${key}`);
 
         let decrypted = cipher.update(payload, storageEncoding, inputEncoding);
         decrypted += cipher.final(inputEncoding);
