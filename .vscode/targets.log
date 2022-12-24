@@ -6,7 +6,7 @@ make all --print-data-base --no-builtin-variables --no-builtin-rules --question
 # This is free software: you are free to change and redistribute it.
 # There is NO WARRANTY, to the extent permitted by law.
 
-# Make data base, printed on Tue Dec 20 13:16:15 2022
+# Make data base, printed on Fri Dec 23 22:41:45 2022
 
 # Variables
 
@@ -57,7 +57,7 @@ CONDA_PROMPT_MODIFIER = false
 # environment
 LANG = C
 # environment
-XAUTHORITY = /run/user/1000/.mutter-Xwaylandauth.OGLKX1
+XAUTHORITY = /run/user/1000/.mutter-Xwaylandauth.GNNFX1
 # default
 .LOADED := 
 # default
@@ -95,13 +95,13 @@ MAKEFILE_LIST := Makefile
 # automatic
 @F = $(notdir $@)
 # environment
-VSCODE_PID = 14810
+VSCODE_PID = 15640
 # environment
 XDG_SESSION_TYPE = wayland
 # automatic
 ?D = $(patsubst %/,%,$(dir $?))
 # environment
-SESSION_MANAGER = local/unix:@/tmp/.ICE-unix/2312,unix/unix:/tmp/.ICE-unix/2312
+SESSION_MANAGER = local/unix:@/tmp/.ICE-unix/2188,unix/unix:/tmp/.ICE-unix/2188
 # automatic
 *F = $(notdir $*)
 # environment
@@ -139,7 +139,7 @@ MAKEFILES :=
 # automatic
 ^F = $(notdir $^)
 # environment
-INVOCATION_ID = 481aed06d48541858a6bc2dd168b5f4a
+INVOCATION_ID = d89e4a40c3654b6396a5505de6bad754
 # environment
 USERNAME = themagicnacho
 # environment
@@ -165,7 +165,7 @@ GIO_LAUNCHED_DESKTOP_FILE = /usr/share/applications/code.desktop
 # makefile
 .DEFAULT_GOAL := setup-initial
 # environment
-SYSTEMD_EXEC_PID = 2362
+SYSTEMD_EXEC_PID = 2238
 # environment
 HISTCONTROL = ignoredups
 # environment
@@ -177,11 +177,11 @@ USER = themagicnacho
 # default
 MAKE_VERSION := 4.3
 # environment
-MANAGERPID = 1976
+MANAGERPID = 1875
 # environment
 DEBUGINFOD_URLS = https://debuginfod.fedoraproject.org/ 
 # environment
-GIO_LAUNCHED_DESKTOP_FILE_PID = 14810
+GIO_LAUNCHED_DESKTOP_FILE_PID = 15640
 # environment
 _ = /usr/bin/make
 # environment
@@ -189,7 +189,7 @@ XDG_RUNTIME_DIR = /run/user/1000
 # environment
 NVM_CD_FLAGS = 
 # environment
-JOURNAL_STREAM = 8:31339
+JOURNAL_STREAM = 8:27209
 # environment
 XDG_SESSION_CLASS = user
 # environment
@@ -288,12 +288,12 @@ help:
 #  recipe to execute (from 'Makefile', line 32):
 	@grep -h -E '^[a-zA-Z0-9_-]+:.*?## .*$$' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-30s\033[0m %s\n", $$1, $$2}'
 
-setup-initial: client-dep server-dep
-#  Implicit rule search has not been done.
-#  Modification time never checked.
  
 make: *** No rule to make target 'all'.  Stop.
 
+setup-initial: client-dep server-dep
+#  Implicit rule search has not been done.
+#  Modification time never checked.
 #  File has not been updated.
 
 client-dep:
@@ -331,6 +331,6 @@ down:
 # strcache performance: lookups = 44 / hit rate = 34%
 # hash-table stats:
 # Load=29/8192=0%, Rehash=0, Collisions=0/44=0%
-# Finished Make data base on Tue Dec 20 13:16:15 2022
+# Finished Make data base on Fri Dec 23 22:41:45 2022
 
  

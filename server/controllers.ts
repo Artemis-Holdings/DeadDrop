@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Request, Response } from 'express';
-import { RequestTicket } from './factory';
-import { Actions } from './interfaces';
+import { RequestTicket, DeadDrop } from './factory';
+import { Actions, IRepository } from './interfaces';
 import Service from './service';
 
 // const service = new Service();
@@ -26,50 +26,61 @@ export class Controllers {
     }
   }
 
-  async deaddrop(requestTicket: RequestTicket, res: Response): Promise<void> {
+  async deaddrop(requestTicket: RequestTicket): Promise<DeadDrop> {
+ const repoBlank: IRepository = {
+    id_dd: '', 
+    pass_hash: '',
+    payload: '',
+    created_at: new Date(), 
+    updated_at: new Date()
+    };
+
+      var placeholder = new DeadDrop(requestTicket, repoBlank);
+
+
     try {
-      // Review Actions enum in interface file.
+      var password = requestTicket.password;
+           // Review Actions enum in interface file.
       switch (Number(Actions[requestTicket.action])) {
         case 1: // new message
           console.log('message');
+          return placeholder;
           break;
         case 2: // change password
           console.log('password');
+          return placeholder;
           break;
         case 3: // change title
           console.log('new title');
+          return placeholder;
           break;
         case 4: // read previous message
-          const password = requestTicket.password;
-
-          requestTicket.encryptTicket(requestTicket.payload, requestTicket.password).then(async () => {
-            const deadDrop = await Service.readDeadDrop(requestTicket, password);
-            console.log('-dev deaddrop on controller: ', deadDrop);
-            res.status(200).json(deadDrop).end(deadDrop);
+          return await requestTicket.encryptTicket(requestTicket.payload, requestTicket.password).then(async () => {
+           return await Service.readDeadDrop(requestTicket, password);
           });
           break;
         case 5: // create an entirely new dead drop
-          requestTicket.encryptTicket(requestTicket.payload, requestTicket.password).then(() => {
-            Service.newDeadDrop(requestTicket);
+         return await requestTicket.encryptTicket(requestTicket.payload, requestTicket.password).then(async () => {
+            return await Service.newDeadDrop(requestTicket).then(async () => {
+                return await Service.readDeadDrop(requestTicket, password);
+            });
           });
           break;
         case 6: // create an entirely new dead drop
           console.log('delete dead drop');
+          return placeholder;
           break;
         default:
           console.log('malformed request');
+          return placeholder;
+          break;
       }
     } catch (error: any) {
       console.log('DeadDrop: Objective Error.');
       console.error(error);
-      res.status(501).json({
-        message: 'Server cannot accept the client request.',
-        error: error.message,
-        stack: error.stack,
-      });
-    }
+      return placeholder;
   }
-
+ }
   // TODO: Remove this paragraph prior to deployment.
   async drop(): Promise<void> {
     try {

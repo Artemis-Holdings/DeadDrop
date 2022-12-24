@@ -76,7 +76,8 @@ export class Routes {
       } else {
         // TODO: move the RequestTicket object instanciation to the controller and out of index.
         const request = new RequestTicket(ticket.action, ticket.title, ticket.password, ticket.payload);
-        controller.deaddrop(request, res);
+        const response = await controller.deaddrop(request);
+        res.status(200).json(response);
       }
     } catch (error: any) {
       res.status(501).json({

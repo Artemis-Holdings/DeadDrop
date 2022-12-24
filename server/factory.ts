@@ -100,9 +100,11 @@ export class DeadDrop extends Cryptogropher implements IDeadDrop {
     const isPasswordMatching = await this.validater(password, this.repositoryHash);
     const deadDropEncryptionState: boolean[] = [this.isEncrypted, isPasswordMatching];
 
-    if (deadDropEncryptionState.includes(false)) {
-    } else {
+    if (!deadDropEncryptionState.includes(false)) {
       this.payload = await this.decrypter(this.payload, password);
+      this.isEncrypted = false;
+    } else {
+      console.log('DeadDrop: contents decrypted');
     }
   }
 }
@@ -128,23 +130,25 @@ export class RequestTicket extends Cryptogropher implements IUserRequest {
 
   async encryptTicket(payload: string, password: string): Promise<boolean> {
     try {
-    return new Promise<boolean>((resolve) => {
-      try {
-        this.encrypter(payload, password).then((encryptedPayload) => {
-          this.payload = encryptedPayload;
+      return new Promise<boolean>((resolve) => {
+        try {
+          this.encrypter(payload, password).then((encryptedPayload) => {
+            this.payload = encryptedPayload;
 
-          this.hasher(password).then((hashedPassword) => {
-            this.password = hashedPassword;
-            resolve(true);
+            this.hasher(password).then((hashedPassword) => {
+              this.password = hashedPassword;
+              resolve(true);
+            });
           });
-        });
-      } catch (error) {
-        console.log(error);
-        resolve(false);
-      }
-    });
-    } catch(error) {
-      throw error;
+        } catch (error) {
+          console.log(error);
+          resolve(false);
+        }
+      });
+    } catch (error) {
+      return new Promise<boolean>(() => {
+        return false;
+      });
     }
   }
 }
