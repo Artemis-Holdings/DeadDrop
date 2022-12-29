@@ -70,14 +70,22 @@ export class Routes {
       if (values.includes(undefined)) {
         res.status(406).json({
           message: 'Malformed headder',
-          error: 'All requests must contain: action, title, payload, and password.',
+          error: `All requests must contain: title, payload, password and action. \n Actions Available: ${Object.keys(
+            Actions,
+          )}`,
           stack: 'Not Applicable',
         });
       } else {
         // TODO: move the RequestTicket object instanciation to the controller and out of index.
         const request = new RequestTicket(ticket.action, ticket.title, ticket.password, ticket.payload);
-        const response = await controller.deaddrop(request);
-        res.status(200).json(response);
+        const deadDrop = await controller.deaddrop(request);
+        if (deadDrop.isEncrypted){
+          deadDrop.strip();
+          res.status(204).json(deadDrop);
+        } else {
+          deadDrop.clean();
+          res.status(201).json(deadDrop);
+        }
       }
     } catch (error: any) {
       res.status(501).json({

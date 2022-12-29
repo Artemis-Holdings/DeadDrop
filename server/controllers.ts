@@ -13,8 +13,10 @@ export class Controllers {
     try {
       const result: string | PromiseLike<string> = new Promise((resolve) => {
         timeoutId = setTimeout(() => {
-          resolve('Dead Drop Oneline');
-        }, 10);
+          resolve(
+            `DeadDrop server is available. \n To make a request submit a PUT request with the following headers: title, payload, password, action.`,
+          );
+        }, 1);
       });
 
       return await result;
@@ -27,46 +29,62 @@ export class Controllers {
   }
 
   async deaddrop(requestTicket: RequestTicket): Promise<DeadDrop> {
- const repoBlank: IRepository = {
-    id_dd: '', 
-    pass_hash: '',
-    payload: '',
-    created_at: new Date(), 
-    updated_at: new Date()
+    const repoBlank: IRepository = {
+      id_dd: '',
+      pass_hash: '',
+      payload: '',
+      created_at: new Date(),
+      updated_at: new Date(),
     };
 
-      var placeholder = new DeadDrop(requestTicket, repoBlank);
-
+    const placeholder = new DeadDrop(requestTicket, repoBlank);
 
     try {
-      var password = requestTicket.password;
-           // Review Actions enum in interface file.
+      const password = requestTicket.password;
+      // Review Actions enum in interface file.
       switch (Number(Actions[requestTicket.action])) {
-        case 1: // new message
-          console.log('message');
-          return placeholder;
-          break;
-        case 2: // change password
+        case 0: // edit dead drop
+          return await requestTicket
+            .encryptTicket(requestTicket.payload, requestTicket.password)
+            .then(async (status: boolean) => {
+              if (status) {
+                const currentDeadDrop = await Service.readDeadDrop(requestTicket, password);
+                if (currentDeadDrop.isEncrypted) {
+                  console.log(`DeadDrop: Request ${requestTicket.id} is invalid. Check the password again .`);
+                  return placeholder;
+                } else {
+                  return await Service.editDeadDrop(requestTicket, password);
+                }
+              } else {
+                console.log(`DeadDrop: Unable to encrypt ticket request ${requestTicket.id}. Try requesting again.`);
+                return placeholder;
+              }
+            });
+        case 1: // change password
           console.log('password');
           return placeholder;
           break;
-        case 3: // change title
+        case 2: // change title
           console.log('new title');
           return placeholder;
-          break;
-        case 4: // read previous message
-          return await requestTicket.encryptTicket(requestTicket.payload, requestTicket.password).then(async () => {
-           return await Service.readDeadDrop(requestTicket, password);
-          });
-          break;
-        case 5: // create an entirely new dead drop
-         return await requestTicket.encryptTicket(requestTicket.payload, requestTicket.password).then(async () => {
-            return await Service.newDeadDrop(requestTicket).then(async () => {
+        case 3: // read previous message
+          return await requestTicket
+            .encryptTicket(requestTicket.payload, requestTicket.password)
+            .then(async (status: boolean) => {
+              if (status) {
                 return await Service.readDeadDrop(requestTicket, password);
+              } else {
+                return placeholder;
+              }
+            });
+        case 4: // create an entirely new dead drop
+          return await requestTicket.encryptTicket(requestTicket.payload, requestTicket.password).then(async () => {
+            return await Service.newDeadDrop(requestTicket).then(async () => {
+              return await Service.readDeadDrop(requestTicket, password);
             });
           });
           break;
-        case 6: // create an entirely new dead drop
+        case 5: // delete dead drop
           console.log('delete dead drop');
           return placeholder;
           break;
@@ -79,8 +97,8 @@ export class Controllers {
       console.log('DeadDrop: Objective Error.');
       console.error(error);
       return placeholder;
+    }
   }
- }
   // TODO: Remove this paragraph prior to deployment.
   async drop(): Promise<void> {
     try {

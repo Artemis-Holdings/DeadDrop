@@ -1,6 +1,3 @@
-import { Request } from 'express';
-import { IncomingHttpHeaders } from 'http';
-
 interface IKnexConfig {
   client: string;
   connection: IKnexConfigDeployment;
@@ -21,16 +18,13 @@ export class KnexConfig implements IKnexConfig {
   } as IKnexConfigDeployment;
 }
 
-// The reason we use the action code to number translation is for ease of update in furture releases.
-// New actions can be modified here, and a new switch is added on the controller.
-// This reduces the overhead.
 export enum Actions {
-  MSG = 1, // edit message
-  PSW = 2, // change password
-  TITLE = 3, // edit title
-  READ = 4, // read only
-  WRITE = 5, // create a dead drop
-  DELETE = 6, // delete a dead drop
+  MSG = 0, // update message
+  PSW = 1, // update password
+  TITLE = 2, // update title
+  READ = 3, // read only
+  WRITE = 4, // create a dead drop
+  DELETE = 5, // delete a dead drop
 }
 
 export interface IUserRequest {
@@ -48,7 +42,7 @@ export interface IDeadDrop {
   isEncrypted: boolean;
   ticketPassword: string;
   repositoryHash: string;
-  createdAt: Date;
+  createdAt?: Date;
   updatedAt: Date;
 }
 
@@ -57,6 +51,6 @@ export interface IRepository {
   id_dd: string | Promise<string>;
   pass_hash: string;
   payload: string;
-  created_at: Date;
+  created_at?: Date;
   updated_at: Date;
 }

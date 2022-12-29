@@ -8,25 +8,43 @@ const adapter = new PostgresAdapter();
 const orm = knex(new KnexConfig());
 
 export default class Service {
+  static async editDeadDrop(requestTicket: RequestTicket, password: string): Promise<DeadDrop> {
+    const repository: IRepository = {
+      id_local: randomUUID(),
+      id_dd: requestTicket.id,
+      pass_hash: requestTicket.password,
+      payload: requestTicket.payload,
+      updated_at: new Date(),
+    };
+
+    const query: string = orm<IRepository>('dead_drop').where('id_dd', requestTicket.id).update(repository).toString();
+    const output = await adapter.write(query).then(async () => {
+      // TODO: add error handling here
+      return await this.readDeadDrop(requestTicket, password);
+    });
+
+    return output;
+  }
+
   static async readDeadDrop(requestTicket: RequestTicket, password: string): Promise<DeadDrop> {
     // TODO: See if we can encode a response message with this repo?
     const repoBlank: IRepository = {
-    id_dd: '', 
-    pass_hash: '',
-    payload: '',
-    created_at: new Date(), 
-    updated_at: new Date()
+      id_dd: '',
+      pass_hash: '',
+      payload: '',
+      created_at: new Date(),
+      updated_at: new Date(),
     };
 
     const query: string = orm.select().from<IRepository>('dead_drop').where('id_dd', requestTicket.id).toString();
-    const raw = (await adapter.read(query));
-    const repo = raw ? raw as IRepository : repoBlank;
+    const raw = await adapter.read(query);
+    const repo = raw ? (raw as IRepository) : repoBlank;
 
     const deadDrop = new DeadDrop(requestTicket, repo);
     await deadDrop.decryptDeadDrop(password);
     return deadDrop;
   }
-
+  // TODO: Refactor newDeadDrop to return a Promise<bool> instead of void.
   static async newDeadDrop(requestTicket: RequestTicket): Promise<void> {
     const repository: IRepository = {
       id_local: randomUUID(),

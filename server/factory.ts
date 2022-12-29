@@ -4,6 +4,7 @@ import bcrypt from 'bcryptjs';
 import { IUserRequest, IDeadDrop, Actions, IRepository } from './interfaces';
 import md5 from 'md5';
 import { resolve } from 'path';
+import { create } from 'domain';
 
 const inputEncoding = 'utf8';
 const storageEncoding = 'hex';
@@ -78,7 +79,7 @@ export class DeadDrop extends Cryptogropher implements IDeadDrop {
   title: string;
   payload: string;
   isEncrypted: boolean;
-  createdAt: Date;
+  createdAt: Date | undefined;
   updatedAt: Date;
   ticketPassword: string;
   repositoryHash: string;
@@ -94,6 +95,24 @@ export class DeadDrop extends Cryptogropher implements IDeadDrop {
     this.repositoryHash = repository.pass_hash;
     this.createdAt = repository.created_at;
     this.updatedAt = repository.updated_at;
+  }
+
+  // Completely empties the dead drop object.
+  strip(): void {
+    this.id = '';
+    this.title = '';
+    this.payload = '';
+    this.repositoryHash = '';
+    this.ticketPassword = '';
+    this.createdAt = new Date(Date.UTC(0, 0, 0, 0, 0, 0));
+    this.updatedAt = new Date(Date.UTC(0, 0, 0, 0, 0, 0));
+  }
+
+  // Removes potentiall sensitive data from the object.
+  clean(): void {
+    this.id = 'redacted';
+    this.repositoryHash = 'redacted';
+    this.ticketPassword = 'redacted';
   }
 
   async decryptDeadDrop(password: string): Promise<void> {
