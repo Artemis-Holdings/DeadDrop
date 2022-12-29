@@ -5,5 +5,3 @@ client/build
 server/.eslintcache
 
 .env
-
-.vscode/

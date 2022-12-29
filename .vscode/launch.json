@@ -1,0 +1,10 @@
+{
+    "configurations": [
+    {
+        "command": "cd server && npm start",
+        "name": "Debug Server",
+        "request": "launch",
+        "type": "node-terminal"
+    }
+    ]
+}

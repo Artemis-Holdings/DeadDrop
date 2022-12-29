@@ -3,8 +3,6 @@ import { Buffer } from 'buffer';
 import bcrypt from 'bcryptjs';
 import { IUserRequest, IDeadDrop, Actions, IRepository } from './interfaces';
 import md5 from 'md5';
-import { resolve } from 'path';
-import { create } from 'domain';
 
 const inputEncoding = 'utf8';
 const storageEncoding = 'hex';
@@ -116,14 +114,18 @@ export class DeadDrop extends Cryptogropher implements IDeadDrop {
   }
 
   async decryptDeadDrop(password: string): Promise<void> {
-    const isPasswordMatching = await this.validater(password, this.repositoryHash);
-    const deadDropEncryptionState: boolean[] = [this.isEncrypted, isPasswordMatching];
+    try {
+      const isPasswordMatching = await this.validater(password, this.repositoryHash);
+      const deadDropEncryptionState: boolean[] = [this.isEncrypted, isPasswordMatching];
 
-    if (!deadDropEncryptionState.includes(false)) {
-      this.payload = await this.decrypter(this.payload, password);
-      this.isEncrypted = false;
-    } else {
-      console.log('DeadDrop: contents decrypted');
+      if (!deadDropEncryptionState.includes(false)) {
+        this.payload = await this.decrypter(this.payload, password);
+        this.isEncrypted = false;
+      } else {
+        console.log('DeadDrop: Plaintext');
+      }
+    } catch {
+      console.log('DeadDrop: ERROR');
     }
   }
 }

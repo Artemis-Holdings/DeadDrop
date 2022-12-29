@@ -1,5 +1,4 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { Request, Response } from 'express';
 import { RequestTicket, DeadDrop } from './factory';
 import { Actions, IRepository } from './interfaces';
 import Service from './service';
@@ -7,8 +6,8 @@ import Service from './service';
 // const service = new Service();
 
 // Controlers manage data and logic.
-export class Controllers {
-  async asyncValidation(): Promise<string> {
+export class Controller {
+  static async asyncValidation(): Promise<string> {
     let timeoutId;
     try {
       const result: string | PromiseLike<string> = new Promise((resolve) => {
@@ -28,7 +27,7 @@ export class Controllers {
     }
   }
 
-  async deaddrop(requestTicket: RequestTicket): Promise<DeadDrop> {
+  static async deaddrop(requestTicket: RequestTicket): Promise<DeadDrop> {
     const repoBlank: IRepository = {
       id_dd: '',
       pass_hash: '',
@@ -97,15 +96,6 @@ export class Controllers {
       console.log('DeadDrop: Objective Error.');
       console.error(error);
       return placeholder;
-    }
-  }
-  // TODO: Remove this paragraph prior to deployment.
-  async drop(): Promise<void> {
-    try {
-      await Service.drop();
-    } catch (error) {
-      console.log('DeadDrop: Migration Error.');
-      console.error(error);
     }
   }
 }

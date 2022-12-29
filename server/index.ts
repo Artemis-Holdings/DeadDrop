@@ -2,9 +2,10 @@
 // Routes are handled here in the index file. Do not handle returns or anything of that sort.
 import { Server } from './app';
 import { Request, Response } from 'express';
-import { Controllers } from './controllers';
+import { Controller } from './controller';
 import { RequestTicket } from './factory';
 import { Actions, IUserRequest } from './interfaces';
+
 enum REST {
   GET = 'get',
   PUT = 'put',
@@ -19,7 +20,7 @@ interface IRouteConfigProps {
 }
 
 const server = new Server();
-const controller = new Controllers();
+// const controller = new Controllers();
 
 function routeConfig({ method, path }: IRouteConfigProps): MethodDecorator {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -50,7 +51,7 @@ export class Routes {
   })
   public async root() {
     // console.log('req: ', typeof req.headers.title);
-    return controller.asyncValidation();
+    return Controller.asyncValidation();
   }
 
   @routeConfig({
@@ -70,7 +71,7 @@ export class Routes {
       if (values.includes(undefined)) {
         res.status(406).json({
           message: 'Malformed headder',
-          error: `All requests must contain: title, payload, password and action. \n Actions Available: ${Object.keys(
+          error: `All requests must contain: title, payload, password and action. Actions Available: ${Object.keys(
             Actions,
           )}`,
           stack: 'Not Applicable',
@@ -78,13 +79,13 @@ export class Routes {
       } else {
         // TODO: move the RequestTicket object instanciation to the controller and out of index.
         const request = new RequestTicket(ticket.action, ticket.title, ticket.password, ticket.payload);
-        const deadDrop = await controller.deaddrop(request);
-        if (deadDrop.isEncrypted){
+        const deadDrop = await Controller.deaddrop(request);
+        if (deadDrop.isEncrypted) {
           deadDrop.strip();
-          res.status(204).json(deadDrop);
+          res.status(200).json(deadDrop);
         } else {
           deadDrop.clean();
-          res.status(201).json(deadDrop);
+          res.status(200).json(deadDrop);
         }
       }
     } catch (error: any) {
@@ -94,26 +95,6 @@ export class Routes {
         stack: error.stack,
       });
     }
-
-    // return controller.deaddrop();
-  }
-
-  // TODO: Remove paragraph. Auto Migrate on start
-  // @routeConfig({
-  //   method: REST.POST,
-  //   path: '/migrate',
-  // })
-  // public async migrate() {
-  //   return controller.migrate();
-  // }
-
-  // TODO: Remove this route before production.
-  @routeConfig({
-    method: REST.DELETE,
-    path: '/drop',
-  })
-  public async drop() {
-    return controller.drop();
   }
 }
 
