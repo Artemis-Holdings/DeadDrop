@@ -19,8 +19,8 @@ export class KnexConfig implements IKnexConfig {
 }
 
 export enum Actions {
-  MSG = 0, // update message
-  PSW = 1, // update password
+  MESSAGE = 0, // update message
+  PSW = 1, // update password (not implemented)
   TITLE = 2, // update title
   READ = 3, // read only
   WRITE = 4, // create a dead drop

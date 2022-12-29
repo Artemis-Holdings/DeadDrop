@@ -6,9 +6,32 @@ import { randomUUID } from 'crypto';
 
 const adapter = new PostgresAdapter();
 const orm = knex(new KnexConfig());
+const repoBlank: IRepository = {
+  id_local: '',
+  id_dd: '',
+  pass_hash: '',
+  payload: '',
+  updated_at: new Date(),
+};
 
 export default class Service {
-  static async editDeadDrop(requestTicket: RequestTicket, password: string): Promise<DeadDrop> {
+  static async deleteDeadDrop(requestTicket: RequestTicket): Promise<DeadDrop> {
+    const blankDeadDrop = new DeadDrop(requestTicket, repoBlank);
+    const query: string = orm<IRepository>('dead_drop').where('id_dd', requestTicket.id).del().toString();
+    const output = await adapter.write(query).then(async (status: boolean) => {
+      if (status) {
+        console.log(`DeadDrop: Object deleted.`);
+        return blankDeadDrop;
+      } else {
+        console.log(`DeadDrop: Error in deleting object ${requestTicket.id}`);
+        return blankDeadDrop;
+      }
+    });
+
+    return output;
+  }
+
+  static async editPayloadDeadDrop(requestTicket: RequestTicket, password: string): Promise<DeadDrop> {
     const repository: IRepository = {
       id_local: randomUUID(),
       id_dd: requestTicket.id,
@@ -27,15 +50,6 @@ export default class Service {
   }
 
   static async readDeadDrop(requestTicket: RequestTicket, password: string): Promise<DeadDrop> {
-    // TODO: See if we can encode a response message with this repo?
-    const repoBlank: IRepository = {
-      id_dd: '',
-      pass_hash: '',
-      payload: '',
-      created_at: new Date(),
-      updated_at: new Date(),
-    };
-
     const query: string = orm.select().from<IRepository>('dead_drop').where('id_dd', requestTicket.id).toString();
     const raw = await adapter.read(query);
     const repo = raw ? (raw as IRepository) : repoBlank;
@@ -45,7 +59,7 @@ export default class Service {
     return deadDrop;
   }
   // TODO: Refactor newDeadDrop to return a Promise<bool> instead of void.
-  static async newDeadDrop(requestTicket: RequestTicket): Promise<void> {
+  static async newDeadDrop(requestTicket: RequestTicket, password: string): Promise<DeadDrop> {
     const repository: IRepository = {
       id_local: randomUUID(),
       id_dd: requestTicket.id,
@@ -56,15 +70,12 @@ export default class Service {
     };
 
     const query: string = orm('dead_drop').insert(repository).toString();
-    adapter.write(query).then(async (passState: boolean) => {
+    return adapter.write(query).then(async (passState: boolean) => {
       if (passState) {
-        const readQ: string = orm.select('payload').from('dead_drop').where('id_dd', requestTicket.id).toString();
-        // TODO: each successfull write needs to respond back to the client`
-        await adapter.read(readQ);
-        // const x: any = await adapter.read(readQ);
-        // console.log('DeadDrop-Dev: read response:  ', x.rows[0]);
+        return this.readDeadDrop(requestTicket, password);
       } else {
         console.log('DeadDrop: Database Service error.');
+        return new DeadDrop(requestTicket, repoBlank);
       }
     });
   }
@@ -85,9 +96,6 @@ export default class Service {
 
   static async drop(): Promise<void> {
     const queryDD: string = orm.schema.dropTableIfExists('dead_drop').toString();
-
-    // console.log('delete query: ', query);
     adapter.read(queryDD);
-    // adapter.read(queryMS);
   }
 }

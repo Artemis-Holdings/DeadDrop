@@ -122,7 +122,7 @@ export class DeadDrop extends Cryptogropher implements IDeadDrop {
         this.payload = await this.decrypter(this.payload, password);
         this.isEncrypted = false;
       } else {
-        console.log('DeadDrop: Plaintext');
+        console.log(`DeadDrop: Unable to decrypt ${this.id}. Is the password correct?`);
       }
     } catch {
       console.log('DeadDrop: ERROR');

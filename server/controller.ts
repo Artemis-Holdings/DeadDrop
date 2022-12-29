@@ -3,8 +3,6 @@ import { RequestTicket, DeadDrop } from './factory';
 import { Actions, IRepository } from './interfaces';
 import Service from './service';
 
-// const service = new Service();
-
 // Controlers manage data and logic.
 export class Controller {
   static async asyncValidation(): Promise<string> {
@@ -13,7 +11,7 @@ export class Controller {
       const result: string | PromiseLike<string> = new Promise((resolve) => {
         timeoutId = setTimeout(() => {
           resolve(
-            `DeadDrop server is available. \n To make a request submit a PUT request with the following headers: title, payload, password, action.`,
+            `☠️ DeadDrop server is available. ☠️ To make a request submit a PUT request with the following headers: title, payload, password, action.`,
           );
         }, 1);
       });
@@ -36,13 +34,13 @@ export class Controller {
       updated_at: new Date(),
     };
 
-    const placeholder = new DeadDrop(requestTicket, repoBlank);
+    const emptyDeadDrop = new DeadDrop(requestTicket, repoBlank);
+    const password = requestTicket.password;
 
     try {
-      const password = requestTicket.password;
-      // Review Actions enum in interface file.
       switch (Number(Actions[requestTicket.action])) {
-        case 0: // edit dead drop
+        case 0: {
+          // UPDATE PAYLOAD
           return await requestTicket
             .encryptTicket(requestTicket.payload, requestTicket.password)
             .then(async (status: boolean) => {
@@ -50,52 +48,102 @@ export class Controller {
                 const currentDeadDrop = await Service.readDeadDrop(requestTicket, password);
                 if (currentDeadDrop.isEncrypted) {
                   console.log(`DeadDrop: Request ${requestTicket.id} is invalid. Check the password again .`);
-                  return placeholder;
+                  return emptyDeadDrop;
                 } else {
-                  return await Service.editDeadDrop(requestTicket, password);
+                  return await Service.editPayloadDeadDrop(requestTicket, password);
                 }
               } else {
                 console.log(`DeadDrop: Unable to encrypt ticket request ${requestTicket.id}. Try requesting again.`);
-                return placeholder;
+                return emptyDeadDrop;
               }
             });
+        }
         case 1: // change password
           console.log('password');
-          return placeholder;
-          break;
-        case 2: // change title
-          console.log('new title');
-          return placeholder;
-        case 3: // read previous message
+          return emptyDeadDrop;
+
+        case 2: {
+          // UPDATE TITLE
+          const newTitle = requestTicket.payload;
+
+          return await requestTicket
+            .encryptTicket(requestTicket.payload, requestTicket.password)
+            .then(async (status: boolean) => {
+              if (status) {
+                const currentDeadDrop = await Service.readDeadDrop(requestTicket, password);
+                if (currentDeadDrop.isEncrypted) {
+                  console.log(`DeadDrop: Request ${requestTicket.id} is invalid. Check the password again .`);
+                  return emptyDeadDrop;
+                } else {
+                  return await Service.deleteDeadDrop(requestTicket).then(async () => {
+                    const updateTitleRequest = new RequestTicket(
+                      Actions.TITLE,
+                      newTitle,
+                      password,
+                      currentDeadDrop.payload,
+                    );
+                    return await createDeadDrop(updateTitleRequest, password);
+                  });
+                }
+              } else {
+                console.log(`DeadDrop: Unable to encrypt ticket request ${requestTicket.id}. Try requesting again.`);
+                return emptyDeadDrop;
+              }
+            });
+        }
+
+        case 3: {
+          // READ DEAD DROP
           return await requestTicket
             .encryptTicket(requestTicket.payload, requestTicket.password)
             .then(async (status: boolean) => {
               if (status) {
                 return await Service.readDeadDrop(requestTicket, password);
               } else {
-                return placeholder;
+                return emptyDeadDrop;
               }
             });
-        case 4: // create an entirely new dead drop
-          return await requestTicket.encryptTicket(requestTicket.payload, requestTicket.password).then(async () => {
-            return await Service.newDeadDrop(requestTicket).then(async () => {
-              return await Service.readDeadDrop(requestTicket, password);
+        }
+        case 4: {
+          // CREATE DEAD DROP
+          return await createDeadDrop(requestTicket, password);
+        }
+        case 5: {
+          // DELETE DEAD DROP
+          return await requestTicket
+            .encryptTicket(requestTicket.payload, requestTicket.password)
+            .then(async (status: boolean) => {
+              if (status) {
+                const currentDeadDrop = await Service.readDeadDrop(requestTicket, password);
+                if (currentDeadDrop.isEncrypted) {
+                  console.log(`DeadDrop: Request ${requestTicket.id} is invalid. Check the password again .`);
+                  return emptyDeadDrop;
+                } else {
+                  return await Service.deleteDeadDrop(requestTicket);
+                }
+              } else {
+                console.log(`DeadDrop: Unable to encrypt ticket request ${requestTicket.id}. Try requesting again.`);
+                return emptyDeadDrop;
+              }
             });
-          });
-          break;
-        case 5: // delete dead drop
-          console.log('delete dead drop');
-          return placeholder;
-          break;
+        }
         default:
           console.log('malformed request');
-          return placeholder;
+          return emptyDeadDrop;
           break;
       }
     } catch (error: any) {
       console.log('DeadDrop: Objective Error.');
       console.error(error);
-      return placeholder;
+      return emptyDeadDrop;
     }
   }
+}
+
+async function createDeadDrop(requestTicket: RequestTicket, password: string): Promise<DeadDrop> {
+  return await requestTicket.encryptTicket(requestTicket.payload, requestTicket.password).then(async () => {
+    return await Service.newDeadDrop(requestTicket, password).then(async () => {
+      return await Service.readDeadDrop(requestTicket, password);
+    });
+  });
 }
