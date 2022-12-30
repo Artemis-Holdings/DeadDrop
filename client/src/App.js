@@ -78,21 +78,21 @@ export default function App() {
 
   function postMessage() {
     var myHeaders = new Headers();
-    myHeaders.append("Content-Type", "application/json");
+    myHeaders.append("title", "Hello World");
     myHeaders.append("payload", message);
     myHeaders.append("password", password);
-
+    myHeaders.append("action", "WRITE");
+    
     var requestOptions = {
       method: 'POST',
       headers: myHeaders,
-      redirect: 'follow',
-      mode: 'cors'
+      redirect: 'follow'
     };
-
-    fetch("http://localhost:8080/message", requestOptions)
+    
+    fetch("http://localhost:8080", requestOptions)
       .then(response => response.json())
       .then(data => {
-        setMsgId(data["msg_id"])
+        setMsgId(data.title);
         setPassword('');
       })
       .catch(error => setErrorResult("An error has occurred, please refresh the page and try again."));
@@ -119,55 +119,39 @@ export default function App() {
       .catch(error => console.log('error', error));
   }
 
+  useEffect(() => {
+    console.log('password: ', password)
+  }, [password])
+
   function getMessage() {
     var myHeaders = new Headers();
-    myHeaders.append("msg_id", reqMsgId);
+    myHeaders.append("title", reqMsgId);
+    myHeaders.append("payload", "");
     myHeaders.append("password", password);
-
-    for (const pair of myHeaders.entries()) {
-      console.log(`header=${pair[0]}: ${pair[1]}`);
-    }
-
+    myHeaders.append("action", "READ");
+    
     var requestOptions = {
-      method: 'GET',
+      method: 'POST',
       headers: myHeaders,
-      redirect: 'follow',
-      mode: 'cors'
+      redirect: 'follow'
     };
-
-    fetch("http://localhost:8080/message", requestOptions)
+    
+    fetch("http://localhost:8080", requestOptions)
       .then(response => {
-        // try {
-          if (response) {
-            const res_msg = response.json();
-            console.log('res: ', res_msg);
-            return res_msg;
-          } else {
-            // throw new Error(response);
-            setErrorResult('')
-          }
-        // } catch (e){
-        //   setErrorResult("Catastrophic Faliure.")
-        // }
+        if (response.ok) {
+          return response.json();
+        }
+        return response.json().then((data) => {
+          throw new Error(data.message);
+        })
       })
-      .then(result => {
-        // try {
-          console.log('result: ', result)
-          setMessageResult(result['message']);
-          setPassword('');
-          setReqMsgId('');
-          return;
-        // } catch (e){
-        //   console.log("error: ", e)
-        // }
-
+      .then(data => {
+        setMessageResult(data.payload);
+        console.log('data: ', data.payload);
+        setPassword('');
+        setReqMsgId('');
       })
-      // .catch(error => {
-      //   // console.log(error);
-      //   // setErrorResult("Your message ID or password were incorrect, please try again");
-      //   // setReqMsgId('');
-      //   // setPassword('');
-      // });
+      .catch(error => setErrorResult(error.message));
   }
 
   function getFileURL() {

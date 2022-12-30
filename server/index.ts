@@ -82,7 +82,7 @@ export class Routes {
         const deadDrop = await Controller.deaddrop(request);
         if (deadDrop.isEncrypted) {
           deadDrop.strip();
-          res.status(200).json(deadDrop);
+          res.status(403).json({message: "Wrong id or password!"});
         } else {
           deadDrop.clean();
           res.status(200).json(deadDrop);

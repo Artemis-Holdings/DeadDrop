@@ -4,6 +4,7 @@ import express, { Express } from 'express';
 import bodyParser from 'body-parser';
 import Service from './service';
 
+import cors from 'cors';
 import morgan from 'morgan';
 
 export class Server {
@@ -35,6 +36,7 @@ export class Server {
     // this._app.use(morgan(this.release === 'production' ? 'combined' : this.release));
     this._app.use(morgan('dev'));
     // CORS
+    this._app.use(cors())
     this.app.use(function (req, res, next) {
       res.setHeader('Access-Control-Allow-Origin', '*');
       res.setHeader('Access-Control-Allow-Credentials', 'true');

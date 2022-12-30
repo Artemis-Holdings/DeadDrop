@@ -63,6 +63,7 @@ export default function TerminalRender() {
                 setInputHistory((prevState) => [...prevState, val])
                 setHistory((prevState) => [...prevState, user + ' ' + val])
             } else if (validResponse.includes("psw")) {
+                console.log("FUCK");
                 setPassword(val)
                 setInputHistory((prevState) => [...prevState, "psw"])
                 setHistory((prevState) => [...prevState, user + ' ' + val])
@@ -87,26 +88,23 @@ export default function TerminalRender() {
         return <p data-testid="history-dd" key={index}>{el.prompt}</p>
     })
 
-    useEffect(() => {
-        console.log('errorResult: ', errorResult)
-        
+    useEffect(() => {        
         if (inputHistory.length === 0) {
             setHistory((prevState) => [...prevState, dialogue.init])
             document.getElementById("input-dd").value = "";
-        } else if (inputHistory.length > 0 && !msgId && !messageResult) {
-            let newPrompt = dialogue.message.find(el => JSON.stringify(el.inputHistory) === JSON.stringify(inputHistory))
+        } else if (inputHistory.length > 0 && !msgId && !messageResult && !errorResult) {
+            let newPrompt = dialogue.message.find(el => JSON.stringify(el.inputHistory) === JSON.stringify(inputHistory));
             setHistory((prevState) => [...prevState, newPrompt])
             document.getElementById("input-dd").value = "";
         } else if (msgId) {
             setHistory((prevState) => [...prevState, { prompt: `Your dead-drop is now saved and passworded protected. Your message id is: <${msgId}>. Please keep this message ID in a secure location. Exit the application or press [r] to return to the initial menu.`, inputHistory: ["postMsgComplete"], validResponse: ["r"] }])
         } else if (messageResult) {
             setHistory((prevState) => [...prevState, { prompt: `Your message is: ${messageResult}. Exit the application or press [r] to return to the initial menu.`, inputHistory: ["viewMsgComplete"], validResponse: ["r"] }]);
-        } 
-        // else if (errorResult) {
-        //     setHistory((prevState) => [...prevState, { prompt: errorResult }]);
-        //     setInputHistory(["m", "v"])
-        //     setErrorResult('');
-        // }
+        } else if (errorResult) {
+            setHistory((prevState) => [...prevState, { prompt: errorResult }]);
+            setInputHistory(["m", "v"])
+            setErrorResult('');
+        }
     }, [inputHistory, msgId, messageResult, errorResult, setHistory])
 
     return (
