@@ -15,13 +15,13 @@ const repoBlank: IRepository = {
 };
 
 export default class Service {
-  static async deleteDeadDrop(requestTicket: RequestTicket): Promise<DeadDrop> {
+  static async deleteDeadDrop(requestTicket: RequestTicket): Promise<DeadDrop | string> {
     const blankDeadDrop = new DeadDrop(requestTicket, repoBlank);
     const query: string = orm<IRepository>('dead_drop').where('id_dd', requestTicket.id).del().toString();
     const output = await adapter.write(query).then(async (status: boolean) => {
       if (status) {
         console.log(`DeadDrop: Object deleted.`);
-        return blankDeadDrop;
+        return 'Deaddrop destroyed.';
       } else {
         console.log(`DeadDrop: Error in deleting object ${requestTicket.id}`);
         return blankDeadDrop;
