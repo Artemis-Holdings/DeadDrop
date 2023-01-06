@@ -4,23 +4,9 @@ import { Server } from './app';
 import { Request, Response } from 'express';
 import { Controller } from './controller';
 import { RequestTicket } from './factory';
-import { Actions, IUserRequest } from './interfaces';
-
-enum REST {
-  GET = 'get',
-  PUT = 'put',
-  POST = 'post',
-  PATCH = 'patch',
-  DELETE = 'delete',
-}
-
-interface IRouteConfigProps {
-  method: REST;
-  path: string;
-}
+import { Actions, IUserRequest, IRouteConfigProps, REST } from './interfaces';
 
 const server = new Server();
-// const controller = new Controllers();
 
 function routeConfig({ method, path }: IRouteConfigProps): MethodDecorator {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -50,7 +36,6 @@ export class Routes {
     path: '/',
   })
   public async root() {
-    // console.log('req: ', typeof req.headers.title);
     return Controller.asyncValidation();
   }
 
@@ -61,8 +46,8 @@ export class Routes {
   public async deaddrop(req: Request, res: Response) {
     try {
       const ticket: IUserRequest = {
+        din: req.headers.din as string,
         action: req.headers.action as unknown as Actions,
-        title: req.headers.title as string,
         payload: req.headers.payload as string,
         password: req.headers.password as string,
       };
@@ -78,7 +63,7 @@ export class Routes {
         });
       } else {
         // TODO: move the RequestTicket object instanciation to the controller and out of index.
-        const request = new RequestTicket(ticket.action, ticket.title, ticket.password, ticket.payload);
+        const request = new RequestTicket(ticket.action, ticket.password, ticket.payload, ticket.din);
         const deadDrop = await Controller.deaddrop(request);
         if (typeof deadDrop === 'string') {
           res.status(200).json({message: deadDrop});

@@ -6,7 +6,6 @@ import md5 from 'md5';
 
 const inputEncoding = 'utf8';
 const storageEncoding = 'hex';
-const initVector = Buffer.alloc(16, 0);
 const salt = 'salt';
 const algorithm = 'aes-256-cbc';
 const saltRounds = 12;
@@ -18,7 +17,9 @@ class Cryptogropher {
   //inputEncoding = 'utf8';
   //storageEncoding = 'hex';
 
-  async encrypter(payload: string, password: string): Promise<string> {
+  async encrypter(payload: string, password: string, initVector: string): Promise<string> {
+    initVector = this.convert16to32(initVector);
+
     const output = new Promise<string>((resolve) => {
       crypto.scrypt(password, salt, keyLength, (error: Error | null, key: Buffer) => {
         const cipher = crypto.createCipheriv(algorithm, key, initVector);
@@ -31,7 +32,9 @@ class Cryptogropher {
     return await output;
   }
 
-  async decrypter(payload: string, password: string): Promise<string> {
+  async decrypter(payload: string, password: string, initVector: string): Promise<string> {
+    initVector = this.convert16to32(initVector);
+
     const output = new Promise<string>((resolve) => {
       crypto.scrypt(password, salt, keyLength, (error: Error | null, key: Buffer) => {
         const cipher = crypto.createDecipheriv(algorithm, key, initVector);
@@ -70,11 +73,15 @@ class Cryptogropher {
       });
     });
   }
+
+  convert16to32(input: string): string {
+    return input + input + input + input;
+  }
 }
 
 export class DeadDrop extends Cryptogropher implements IDeadDrop {
   id: Promise<string> | string;
-  title: string;
+  din: string;
   payload: string;
   isEncrypted: boolean;
   createdAt: Date | undefined;
@@ -86,9 +93,9 @@ export class DeadDrop extends Cryptogropher implements IDeadDrop {
 
   constructor(requestTicket: RequestTicket, repository: IRepository) {
     super();
-
     this.id = repository.id_dd;
-    this.title = requestTicket.title;
+    this.din = requestTicket.din;
+    // this.title = requestTicket.title;
     this.payload = repository.payload;
     this.isEncrypted = true;
     this.ticketPassword = requestTicket.password;
@@ -97,10 +104,9 @@ export class DeadDrop extends Cryptogropher implements IDeadDrop {
     this.updatedAt = repository.updated_at;
   }
 
-  // Completely empties the dead drop object.
   strip(): void {
     this.id = '';
-    this.title = '';
+    this.din = '';
     this.payload = '';
     this.repositoryHash = '';
     this.ticketPassword = '';
@@ -108,7 +114,6 @@ export class DeadDrop extends Cryptogropher implements IDeadDrop {
     this.updatedAt = new Date(Date.UTC(0, 0, 0, 0, 0, 0));
   }
 
-  // Removes potentiall sensitive data from the object.
   clean(): void {
     this.id = 'redacted';
     this.repositoryHash = 'redacted';
@@ -121,7 +126,7 @@ export class DeadDrop extends Cryptogropher implements IDeadDrop {
       const deadDropEncryptionState: boolean[] = [this.isEncrypted, isPasswordMatching];
 
       if (!deadDropEncryptionState.includes(false)) {
-        this.payload = await this.decrypter(this.payload, password);
+        this.payload = await this.decrypter(this.payload, password, this.din);
         this.isEncrypted = false;
       } else {
         console.log(`DeadDrop: Unable to decrypt ${this.id}. Is the password correct?`);
@@ -134,30 +139,34 @@ export class DeadDrop extends Cryptogropher implements IDeadDrop {
 
 export class RequestTicket extends Cryptogropher implements IUserRequest {
   action!: Actions;
-  title!: string;
+  // title!: string;
+  din: string;
   password!: string;
   payload!: string;
   id: Promise<string> | string;
 
-  constructor(action: Actions, title: string, password: string, payload: string) {
+  constructor(action: Actions, password: string, payload: string, din: string = '') {
     super();
     this.action = action;
-    this.title = title;
+    this.din = din === '' ? this.din16bit() : din;
     this.password = password;
     this.payload = payload;
-    this.id = this.idGenerator(title);
+    this.id = this.idGenerator(this.din);
   }
-  private idGenerator(title: string): string {
-    return md5(title);
+  private idGenerator(din: string): string {
+    return md5(din);
+  }
+
+  private din16bit(): string {
+    return Math.random().toString(36).substring(2, 6);
   }
 
   async encryptTicket(payload: string, password: string): Promise<boolean> {
     try {
       return new Promise<boolean>((resolve) => {
         try {
-          this.encrypter(payload, password).then((encryptedPayload) => {
+          this.encrypter(payload, password, this.din).then((encryptedPayload) => {
             this.payload = encryptedPayload;
-
             this.hasher(password).then((hashedPassword) => {
               this.password = hashedPassword;
               resolve(true);

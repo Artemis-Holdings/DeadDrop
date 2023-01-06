@@ -21,7 +21,7 @@ export class KnexConfig implements IKnexConfig {
 export enum Actions {
   MESSAGE = 0, // update message
   PSW = 1, // update password (not implemented)
-  TITLE = 2, // update title
+  // TITLE = 2, // update title
   READ = 3, // read only
   WRITE = 4, // create a dead drop
   DELETE = 5, // delete a dead drop
@@ -29,7 +29,7 @@ export enum Actions {
 
 export interface IUserRequest {
   id?: Promise<string> | string;
-  title: string;
+  din?: string;
   password: string;
   payload: string;
   action: Actions;
@@ -37,7 +37,7 @@ export interface IUserRequest {
 
 export interface IDeadDrop {
   id: Promise<string> | string;
-  title: string;
+  din: string;
   payload: string;
   isEncrypted: boolean;
   ticketPassword: string;
@@ -54,3 +54,17 @@ export interface IRepository {
   created_at?: Date;
   updated_at: Date;
 }
+
+export enum REST {
+  GET = 'get',
+  PUT = 'put',
+  POST = 'post',
+  PATCH = 'patch',
+  DELETE = 'delete',
+}
+
+export interface IRouteConfigProps {
+  method: REST;
+  path: string;
+}
+
