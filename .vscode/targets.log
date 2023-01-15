@@ -10,11 +10,12 @@ make all --print-data-base --no-builtin-variables --no-builtin-rules --question
 make: *** No rule to make target `all'.  Stop.
 
 
-# Make data base, printed on Fri Dec 30 17:26:24 2022
+# Make data base, printed on Sun Jan 15 14:21:42 2023
 
 # Variables
 
 # automatic
+ 
 <D = $(patsubst %/,%,$(dir $<))
 # automatic
 ?F = $(notdir $?)
@@ -45,13 +46,11 @@ PATH = /Users/sara2in/.rd/bin:/Users/sara2in/.nvm/versions/node/v16.14.2/bin:/us
 # environment
 NVM_BIN = /Users/sara2in/.nvm/versions/node/v16.14.2/bin
 # environment
-LaunchInstanceID = B7971317-B652-4C34-B9CD-BA7173ABFE77
-# environment
 ELECTRON_RUN_AS_NODE = 1
 # default
 .FEATURES := target-specific order-only second-expansion else-if archives jobserver check-symlink
 # environment
-SSH_AUTH_SOCK = /private/tmp/com.apple.launchd.jf22jFHt1j/Listeners
+SSH_AUTH_SOCK = /private/tmp/com.apple.launchd.va2SV2k84Z/Listeners
 # automatic
 %F = $(notdir $%)
 # environment
@@ -65,7 +64,7 @@ HOME = /Users/sara2in
 # default
 MAKEFILEPATH = $(shell /usr/bin/xcode-select -print-path 2>/dev/null || echo /Developer)/Makefiles
 # environment
-VSCODE_CODE_CACHE_PATH = /Users/sara2in/Library/Application Support/Code/CachedData/6261075646f055b99068d3688932416f2346dd3b
+VSCODE_CODE_CACHE_PATH = /Users/sara2in/Library/Application Support/Code/CachedData/e8a3071ea4344d9d48ef8a4df2c097372b0c5161
 # environment
 LOGNAME = sara2in
 # environment
@@ -103,7 +102,7 @@ TMPDIR = /var/folders/f5/lxwz3ysj0130hh56_mqmkvy80000gn/T/
 # automatic
 *F = $(notdir $*)
 # environment
-VSCODE_IPC_HOOK = /Users/sara2in/Library/Application Support/Code/1.73.1-main.sock
+VSCODE_IPC_HOOK = /Users/sara2in/Library/Application Support/Code/1.74.2-main.sock
 # environment
 MallocNanoZone = 0
 # makefile
@@ -115,7 +114,7 @@ MFLAGS = -Rrqp
 # environment
 NVM_DIR = /Users/sara2in/.nvm
 # environment
-XPC_SERVICE_NAME = application.com.microsoft.VSCode.42658847.42658854
+XPC_SERVICE_NAME = application.com.microsoft.VSCode.47415030.47415036
 # automatic
 +D = $(patsubst %/,%,$(dir $+))
 # automatic
@@ -130,8 +129,6 @@ MAKEFILES :=
 <F = $(notdir $<)
 # environment
 LC_ALL = C
-# environment
-SECURITYSESSIONID = 186a8
 # automatic
 ^F = $(notdir $^)
 # default
@@ -143,9 +140,9 @@ MAKELEVEL := 0
 # environment
 LANG = C
 # environment
-VSCODE_PID = 490
+VSCODE_PID = 59459
 # variable set hash-table stats:
-# Load=65/1024=6%, Rehash=0, Collisions=1/90=1%
+# Load=63/1024=6%, Rehash=0, Collisions=1/88=1%
 
 # Pattern-specific Variable Values
 
@@ -153,7 +150,7 @@ VSCODE_PID = 490
 
 # Directories
 
-# . (device 16777221, inode 46706718): 13 files, no impossibilities.
+# . (device 16777220, inode 46706718): 13 files, no impossibilities.
 
 # 13 files, no impossibilities in 1 directories.
 
@@ -213,7 +210,6 @@ server-dep:
 # Not a target:
 Makefile:
 #  Implicit rule search has been done.
- 
 #  Last modified 2022-12-30 11:42:26
 #  File has been updated.
 #  Successfully updated.
@@ -268,6 +264,6 @@ down:
 # strcache size: total = 4096 / max = 4096 / min = 4096 / avg = 4096
 # strcache free: total = 4087 / max = 4087 / min = 4087 / avg = 4087
 
-# Finished Make data base on Fri Dec 30 17:26:24 2022
+# Finished Make data base on Sun Jan 15 14:21:42 2023
 
  
