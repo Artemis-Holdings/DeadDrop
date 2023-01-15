@@ -62,9 +62,9 @@
             "validResponse": ["psw"]
         },
         {
-            "prompt": "Password verified, type [s] to delete the dead-drop message",
+            "prompt": "Type [s] to delete the dead-drop message",
             "inputHistory": ["m", "d", "msgId", "psw"],
-            "validResponse": ["s"]
+            "validResponse": ["s", "sendDeleteMessage"]
         },
         {
             "prompt": "Deleting...",
@@ -82,14 +82,14 @@
             "validResponse": ["psw"]
         },
         {
-            "prompt": "Password verified, type your new message to update the dead-drop",
+            "prompt": "Type your new message to update the dead-drop",
             "inputHistory": ["m", "e", "msgId", "psw"],
             "validResponse": ["msg"]
         },
         {
             "prompt": "Your updated message has been staged, press [s] to submit.",
             "inputHistory": ["m", "e", "msgId", "psw", "msg"],
-            "validResponse": ["s"]
+            "validResponse": ["s", "sendEditMessage"]
         },
         {
             "prompt": "Encrypting message update...",

@@ -81,6 +81,8 @@ export class DeadDrop extends Cryptogropher implements IDeadDrop {
   updatedAt: Date;
   ticketPassword: string;
   repositoryHash: string;
+  statusCode: number | undefined;
+  message: string | undefined;
 
   constructor(requestTicket: RequestTicket, repository: IRepository) {
     super();
