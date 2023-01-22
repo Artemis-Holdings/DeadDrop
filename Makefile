@@ -1,13 +1,19 @@
 SHELL := /bin/bash
 
 
-setup-initial: client-dep server-dep ## Setup
+install: client-dep server-dep ## Setup
 
 client-dep: ## Install dependencies
-	@cd DeadDrop.ui && yarn install
+	@cd client && npm install
 
 server-dep: ## Get Go dependencies
-	@cd DeadDrop.api && yarn install
+	@cd server && npm install
+
+build:
+	@cd client && npm build
+
+start:
+	@cd server && npm start
 
 # kill-servers:
 # 	@pkill -f bin/shepherd-server || true

@@ -9,14 +9,12 @@ import { Actions, IUserRequest, IRouteConfigProps, REST } from './interfaces';
 const server = new Server();
 
 function routeConfig({ method, path }: IRouteConfigProps): MethodDecorator {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   return function (_target: any, _propertyKey: string | symbol, descriptor: PropertyDescriptor) {
     const response = async (req: Request, res: Response) => {
       try {
         const original = await descriptor.value(req, res);
 
         res.status(200).json(original);
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
       } catch (error: any) {
         res.status(500).json({
           message: 'Some error occurred',
@@ -31,13 +29,16 @@ function routeConfig({ method, path }: IRouteConfigProps): MethodDecorator {
 }
 
 export class Routes {
+
   @routeConfig({
     method: REST.GET,
-    path: '/',
+    path: '/ping',
   })
-  public async root() {
+  public async ping() {
     return Controller.asyncValidation();
   }
+
+
 
   @routeConfig({
     method: REST.POST,

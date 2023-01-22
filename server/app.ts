@@ -4,7 +4,7 @@ import express, { Express } from 'express';
 import bodyParser from 'body-parser';
 import Service from './service';
 
-import cors from 'cors';
+import cors from 'cors';
 import morgan from 'morgan';
 
 export class Server {
@@ -26,10 +26,11 @@ export class Server {
     this._app.set('port', process.env.PORT || 8080);
     this.configureMiddleware();
 
-    this.release = process.env.RELEASE || 'dev';
+    this.release = process.env.NODE_ENV || 'dev';
   }
 
   public configureMiddleware() {
+    this._app.use('/', express.static('client_build'));
     // Required for POST requests
     this._app.use(bodyParser.json());
     this._app.use(bodyParser.urlencoded({ extended: true }));
@@ -54,12 +55,15 @@ export class Server {
       Service.migratePrimary();
 
       this._server = this._app.listen(this._app.get('port'), () => {
-        console.log('☠️ DEAD-DROP SERVER // Listening to port ', this._app.get('port'));
-        console.log('🚀 RELEASE: ', this.release);
+        console.log('☠️ DEAD-DROP SERVER ONLINE ☠️');
+        console.log('🛥️ Port: ', this._app.get('port'));
+        console.log('🤖 PID: ', process.pid);
+        console.log('🚀 Environment: ', this.release);
         console.log(' /// Start Logs /// ');
       });
-    } catch {
-      console.warn('DeadDrop: Unable to migrate DB.');
+    } catch (error: any) {
+      console.warn('DeadDrop :: Unable to start DeadDrop Server.');
+      console.error(error);
     }
   }
 }

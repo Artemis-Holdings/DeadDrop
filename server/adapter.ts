@@ -89,11 +89,11 @@ export class PostgresAdapter {
       bootstrap
         .query(query)
         .then(() => {
-          console.log('DeadDrop: Adapter created table created.');
+          console.log('DeadDrop :: Adapter created table created.');
           resolve(true);
         })
         .catch(() => {
-          console.log('DeadDrop: Adapter found table already existed.');
+          console.log('DeadDrop :: Adapter found table already existed.');
           resolve(false);
         })
         .then(() => bootstrap.end());
@@ -108,11 +108,11 @@ export class PostgresAdapter {
       bootstrap
         .query(`CREATE DATABASE ${this.connectionObject.database};`)
         .then(() => {
-          console.log(`DeadDrop: Adapter created DB titled ${this.connectionObject.database}`);
+          console.log(`DeadDrop :: Adapter created DB titled ${this.connectionObject.database}`);
           resolve(true);
         })
         .catch(() => {
-          console.log(`DeadDrop: Adapter found an existing DB called ${this.connectionObject.database}`);
+          console.log(`DeadDrop :: Adapter found an existing DB called ${this.connectionObject.database}`);
           resolve(false);
         })
         .then(() => bootstrap.end());
