@@ -1,7 +1,21 @@
-server/node_modules
+# standard ignore for a node application
+client/.env
+client/.env.local
+client/.env.development.local
+client/.env.test.local
+client/.env.production.local
+client/.cache
 client/node_modules
-server/build
 client/build
-server/.eslintcache
+
+# standard ignore for a rust application
+server/target
+server/.cargo
+server/.rustup
+server/.rustup-override
+server/.rustup-override.toml
+server/Cargo.lock
+server/target
+server/client_build
 
 .env
