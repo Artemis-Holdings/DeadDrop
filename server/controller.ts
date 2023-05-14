@@ -25,7 +25,7 @@ export class Controller {
     }
   }
 
-  static async deaddrop(requestTicket: RequestTicket): Promise<DeadDrop | string> {
+  static async deaddrop(requestTicket: RequestTicket): Promise<DeadDrop> {
     const repoBlank: IRepository = {
       id_dd: '',
       pass_hash: '',
