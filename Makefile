@@ -2,17 +2,14 @@ SHELL := /bin/bash
 
 #  install all dependencies then cargo install cargo-watch
 setup-dev: 
-	@cd client && yarn install
+	@cd client && npm install
 	@cd server && cargo install --path .
 	@cargo install cargo-watch
 	@cargo install diesel_cli --no-default-features --features postgres
-	
 
-client-dep: ## Install dependencies
-	@cd DeadDrop.ui && yarn install
-
-server-dep: ## Get Go dependencies
-	@cd DeadDrop.api && yarn install
+# CLIENT
+client-build: ## Build the client
+	@cd client && npm run build
 
 # kill-servers:
 # 	@pkill -f bin/shepherd-server || true
