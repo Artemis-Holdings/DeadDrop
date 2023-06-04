@@ -1,6 +1,8 @@
 make --dry-run --always-make --keep-going --print-directory
-make: Entering directory `/Users/sara2in/OneDrive/Coding/Personal/dead-drop'
-cd DeadDrop.ui && yarn install
-cd DeadDrop.api && yarn install
-make: Leaving directory `/Users/sara2in/OneDrive/Coding/Personal/dead-drop'
+make: Entering directory '/home/themagicnacho/dead-drop'
+cd client && npm install
+cd server && cargo install --path .
+cargo install cargo-watch
+cargo install diesel_cli --no-default-features --features postgres
+make: Leaving directory '/home/themagicnacho/dead-drop'
  

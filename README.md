@@ -1,46 +1,56 @@
-# DeadDrop
+# 💀 DeadDrop
+Dead Drop is a a userless encrypted message sharing platform. It is designed to be a secure, self-hosted, and easy to maintain. 
+Because the application is userless, it is not possible to track the sender or receiver of a message. The security is avhieved using Ecliptic Curve Cryptography and Post-Quantum Cryptography.
 
-Starting the server using `npm start` will start the server locally using dev environment variables. 
-Please remember to build the container prior to production deployment. 
+## 🤖 Application Programming Interface
+The DeadDrop API is a RESTful API which is designed to be easy to use and understand. The API is designed to be used by any client, but we have provided a web client for ease of use.
 
-Decision to use SQL.
-- We decided to use SQL over other serverless options like fauna, because we wanted the Dead Drop container to be environment agnostic. Anybody can take this source code and deploy their own DD instance and use any container.
+***Ticket***:
+The ticket object is a clear text object used to create the encrypted message.
+- title: string
+- message: string
+- attachment: [u8]
+- password: string
+- action: string
 
-- To further facilitate instance portability, DeadDrop has a custom written database adapter object. If you want to attach to an unsupported database, write your own adapter that has a 'write' & 'read' method within the adapter object.
+***DeadDrop***
+The DeadDrop object is an encrypted object used to store the message.
+- id: uuid
+- title: string (sha256)
+- message: Payload
+- attachment: Payload
+- created_at: timestamp
+- modified_at: timestamp
 
-# The Object Factory
-There are two primary objects: The Request Ticket, and the Dead Drop
-Both objects are extensions of the Cryptogropher.
-FUTURE: An error boundry object which is returned to the client if there is an error on the server. Currently, an error on the server returns an empty dead drop; this prevents crashes but does not elaborate as to why something is wrong. 
-
-
-## Request Ticket
-A request ticket is an object instanciated by the user and used to create a dead drop. 
-### From client
-Dead Drop takes 1 POST request.
-All methods to Create, Read, Update, or Delete are done through the 'action' key in the headder.
-Header reqeust Must include:
-```
-title: string
-password: string
-payload: string
-action: MESSAGE | TITLE | READ | WRITE | DELETE
-```
-
-### Server Side
-The server validates that all 4 header items are present during request (index.ts);
-The client's request is turned into a ticket object (index.ts) and passed to a controller (controller.ts).
-The controller will use the provided action from the ticket to switch the ticket to the required service.
+Payload
+The Message object contains the encrypted message and a vector of public keys.
+- message: [u8]
+- public_keys: [u8]
 
 
-## Dead Drop
-Created by the server and passed to the client.
-# Controller > Service > Adapter > Repository
-## Controller
-The controller consists of two files: index.ts and controller.ts
-index instanciates the server application (app.ts), listens to http requests, and instanciates a controller object.
-The controller objects recieves the input and switches data accordingly.
 
+## 🐘 Database
+DeadDrop uses postgresql as its database. We recommend bitnami's postgresql helm chart for easy deployment, but any postgresql instance will work.
+
+### Schema
+DeadDrop uses a single table to store all messages and attachments. The table is called 'dead_drop' and has the following schema:
+
+| Column Name | Data Type | Description |
+| ----------- | --------- | ----------- |
+| id | UUID | The unique identifier for the message. |
+| title | VARCHAR(256) | The title hash. |
+| messege | BYTEA | A binary searialization of the messege object. Encrypted. |
+| attachment | BYTEA | A binaray serialization of binary large objects. Encrypted.|
+| created_at | TIMESTAMP | The time the message was created. |
+| modified_at | TIMESTAMP | The time the message was modified. |
+
+
+> ***Decision to use SQL***
+>
+> We decided to use SQL over other serverless options like fauna, because we wanted the DeadDrop container to be environment agnostic. Anybody can take this source code and deploy their own DeadDrop instance.
+
+
+## The Object Factory
 
 
 

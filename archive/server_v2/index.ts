@@ -80,16 +80,12 @@ export class Routes {
         // TODO: move the RequestTicket object instanciation to the controller and out of index.
         const request = new RequestTicket(ticket.action, ticket.title, ticket.password, ticket.payload);
         const deadDrop = await Controller.deaddrop(request);
-        if (typeof deadDrop === 'string') {
-          res.status(200).json({message: deadDrop});
+        if (deadDrop.isEncrypted) {
+          deadDrop.strip();
+          res.status(200).json(deadDrop);
         } else {
-          if (deadDrop.isEncrypted) {
-            deadDrop.strip();
-            res.status(403).json({message: "Wrong id or password!"});
-          } else {
-            deadDrop.clean();
-            res.status(200).json(deadDrop);
-          }
+          deadDrop.clean();
+          res.status(200).json(deadDrop);
         }
       }
     } catch (error: any) {
