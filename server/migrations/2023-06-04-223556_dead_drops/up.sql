@@ -1,0 +1,8 @@
+CREATE TABLE dead_drop (
+    id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+    title VARCHAR NOT NULL,
+    msg BYTEA,
+    att BYTEA,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL
+);

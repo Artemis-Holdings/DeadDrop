@@ -1,11 +1,14 @@
 pub mod factory;
-use std::fs;
+mod models;
+pub mod service;
+// use std::fs;
 
-use bincode::de;
+// use bincode::de;
 use rocket::tokio::time::{sleep, Duration};
 use std::{io, path::{Path, PathBuf}};
 use rocket::{get, routes, response::Redirect, fs::NamedFile};
 use crate::factory::Ticket;
+use crate::service::Service;
 
 #[macro_use] extern crate rocket;
 
@@ -34,7 +37,7 @@ async fn deaddrop() -> String {
 
     // create the ticket
     let test_ticket = Ticket::new(
-        "test title".to_string(),
+        "test title2".to_string(),
         "test message".to_string(),
         "testpassword".to_string(),
         "CREATE".to_string(),
@@ -43,9 +46,14 @@ async fn deaddrop() -> String {
     );
     let dead_drop = test_ticket.generate_deaddrop();
     println!("dead_drop: {:?}", dead_drop);
+
+    let set_obj = Service::create_deaddrop(dead_drop);
     // pass ticket to controller
-    let msg = dead_drop.msg_decrypt("testpassword".to_string());
-    println!("dead_drop: {:?}", msg);
+    // let msg = dead_drop.msg_decrypt("testpassword".to_string());
+    // println!("dead_drop: {:?}", set_obj);
+
+    let from_db = Service::read_deaddrop(set_obj.title);
+    println!("from_db: {:?}", from_db);
 
     return format!(" ☠️ DEAD DROP ONLINE ☠️ \n Awaited for 1 second. \n ECHO: {} \n", "test");
 }

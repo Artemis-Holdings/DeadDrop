@@ -16,9 +16,9 @@ use serde::{Serialize, Deserialize};
 /// The payload struct contains the encrypted message and the public keys of the payload.
 /// Each property is of type `Vec<group::edwards25519::Point>`.
 #[derive(Serialize, Deserialize, Debug)]
-struct Payload {
-    binaries: Vec<group::edwards25519::Point>,
-    public_keys: Vec<group::edwards25519::Point>,
+pub struct Payload {
+    pub binaries: Vec<group::edwards25519::Point>,
+    pub public_keys: Vec<group::edwards25519::Point>,
 }
 
 /// The Ticket struct is a clear text object used to create the encrypted message. 
@@ -30,11 +30,11 @@ struct Payload {
 /// - action : The action to be performed by the controller (CREATE, READ, UPDATE, DELETE). String must match CRUD exactly.
 #[derive(Debug)]
 pub struct Ticket{
-    title: String,
-    message: String,
-    password: String,
-    action: String,
-    attachment: Vec<u8>,
+    pub title: String,
+    pub message: String,
+    pub password: String,
+    pub action: String,
+    pub attachment: Vec<u8>,
 }
 /// The DeadDrop struct is an ecrypted object comprising of payloads and metadata.
 /// - id : The id of the dead drop.
@@ -43,10 +43,10 @@ pub struct Ticket{
 /// - attachment : The binary file of the dead drop as a Payload.
 #[derive(Debug)]
 pub struct DeadDrop {
-    id: Uuid,
-    title: String,
-    message: Payload,
-    attachment: Payload,
+    pub id: Uuid,
+    pub title: String,
+    pub message: Payload,
+    pub attachment: Payload,
     // created_at: DateTime<Utc>,
     // updated_at: DateTime<Utc>,
 }

@@ -2,6 +2,8 @@
 Dead Drop is a a userless encrypted message sharing platform. It is designed to be a secure, self-hosted, and easy to maintain. 
 Because the application is userless, it is not possible to track the sender or receiver of a message. The security is avhieved using Ecliptic Curve Cryptography and Post-Quantum Cryptography.
 
+
+NOTE TO SELF - Main = Rocket , Controller = DeadDrop, Service = Deisel 
 ## 🤖 Application Programming Interface
 The DeadDrop API is a RESTful API which is designed to be easy to use and understand. The API is designed to be used by any client, but we have provided a web client for ease of use.
 
@@ -32,15 +34,20 @@ The Message object contains the encrypted message and a vector of public keys.
 ## 🐘 Database
 DeadDrop uses postgresql as its database. We recommend bitnami's postgresql helm chart for easy deployment, but any postgresql instance will work.
 
+
 ### Schema
 DeadDrop uses a single table to store all messages and attachments. The table is called 'dead_drop' and has the following schema:
+
+
+`echo DATABASE_URL=postgres://postgres:postgres@localhost:5432/dead_drop > .env`
+
 
 | Column Name | Data Type | Description |
 | ----------- | --------- | ----------- |
 | id | UUID | The unique identifier for the message. |
 | title | VARCHAR(256) | The title hash. |
-| messege | BYTEA | A binary searialization of the messege object. Encrypted. |
-| attachment | BYTEA | A binaray serialization of binary large objects. Encrypted.|
+| msg | BYTEA | A binary searialization of the messege object. Encrypted. |
+| att | BYTEA | A binaray serialization of binary large objects. Encrypted.|
 | created_at | TIMESTAMP | The time the message was created. |
 | modified_at | TIMESTAMP | The time the message was modified. |
 

@@ -8,7 +8,7 @@ make: *** No rule to make target 'all'.  Stop.
 # This is free software: you are free to change and redistribute it.
 # There is NO WARRANTY, to the extent permitted by law.
 
-# Make data base, printed on Sat Jun  3 20:28:40 2023
+# Make data base, printed on Mon Jun  5 07:06:01 2023
 
 # Variables
 
@@ -55,7 +55,7 @@ NVM_BIN = /home/themagicnacho/.nvm/versions/node/v20.2.0/bin
 # environment
 ELECTRON_RUN_AS_NODE = 1
 # environment
-VSCODE_IPC_HOOK_CLI = /mnt/wslg/runtime-dir/vscode-ipc-1cf29909-3524-40cd-87ba-b7e1ba2a8cff.sock
+VSCODE_IPC_HOOK_CLI = /mnt/wslg/runtime-dir/vscode-ipc-6cd3eabf-3a40-470a-883e-1a00ba68d899.sock
 # default
 .FEATURES := target-specific order-only second-expansion else-if shortest-stem undefine oneshell archives jobserver output-sync check-symlink load
 # automatic
@@ -69,7 +69,7 @@ PWD = /home/themagicnacho/dead-drop
 # default
 .LOADED := 
 # environment
-WSL_INTEROP = /run/WSL/13866_interop
+WSL_INTEROP = /run/WSL/1670_interop
 # environment
 PULSE_SERVER = unix:/mnt/wslg/PulseServer
 # environment
@@ -128,6 +128,8 @@ MFLAGS = -pqrR
 NVM_DIR = /home/themagicnacho/.nvm
 # automatic
 +D = $(patsubst %/,%,$(dir $+))
+# environment
+VSCODE_L10N_BUNDLE_LOCATION = 
 # automatic
 +F = $(notdir $+)
 # environment
@@ -156,8 +158,10 @@ LANG = C
 TERM = xterm-256color
 # environment
 WSL_DISTRO_NAME = Ubuntu
+# environment
+MOTD_SHOWN = update-motd
 # variable set hash-table stats:
-# Load=72/1024=7%, Rehash=0, Collisions=4/98=4%
+# Load=74/1024=7%, Rehash=0, Collisions=4/100=4%
 
 # Pattern-specific Variable Values
 
@@ -275,6 +279,6 @@ down:
 # strcache performance: lookups = 43 / hit rate = 30%
 # hash-table stats:
 # Load=30/8192=0%, Rehash=0, Collisions=1/43=2%
-# Finished Make data base on Sat Jun  3 20:28:40 2023
+# Finished Make data base on Mon Jun  5 07:06:01 2023
 
  
