@@ -17,10 +17,12 @@ use crate::service::Service;
 fn index() -> Redirect {
     Redirect::permanent("/index.html")
 }
+
 #[get("/<file..>")]
 async fn build_dir(file: PathBuf) -> io::Result<NamedFile> {
     NamedFile::open(Path::new("client_build/").join(file)).await
 }
+
 // TEST API
 #[get("/api/test/<echo>")]
 async fn test(echo: &str) -> String {
@@ -48,12 +50,25 @@ async fn deaddrop() -> String {
     println!("dead_drop: {:?}", dead_drop);
 
     let set_obj = Service::create_deaddrop(dead_drop);
-    // pass ticket to controller
-    // let msg = dead_drop.msg_decrypt("testpassword".to_string());
-    // println!("dead_drop: {:?}", set_obj);
 
     let from_db = Service::read_deaddrop(set_obj.title);
     println!("from_db: {:?}", from_db);
+
+    let updated_ticket = Ticket::new(
+        "test title2".to_string(),
+        "test messagenew".to_string(),
+        "testpassword".to_string(),
+        "UPDATE".to_string(),
+        Vec::new(),
+        // test_file,
+    );
+
+    let updated_dead_drop = updated_ticket.generate_deaddrop();
+    let updated_obj = Service::update_deaddrop(updated_dead_drop);
+    println!("updated_obj: {:?}", updated_obj);
+
+    let deleted_obj = Service::delete_deaddrop(updated_obj.title);
+    println!("deleted_obj: {:?}", deleted_obj);
 
     return format!(" ☠️ DEAD DROP ONLINE ☠️ \n Awaited for 1 second. \n ECHO: {} \n", "test");
 }

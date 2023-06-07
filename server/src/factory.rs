@@ -12,6 +12,7 @@ use kyber_rs::Group;
 use serde::{Serialize, Deserialize};
 
 // TODO: Change the attachment encryption algorithm, find something that is faster.
+// TODO: How do I turn the model into a return object? How do we want the return object to look?
 
 /// The payload struct contains the encrypted message and the public keys of the payload.
 /// Each property is of type `Vec<group::edwards25519::Point>`.
@@ -77,8 +78,6 @@ impl Ticket {
             title: self.title.clone(),
             message: message,
             attachment: attachment,
-            // created_at: Utc::now(),
-            // updated_at: Utc::now(),
         };
         // return the dead drop
         return dead_drop;
@@ -139,7 +138,7 @@ impl Ticket {
         data: &[u8],
     ) -> (GROUP::POINT, GROUP::POINT, Vec<u8>) {
         // Embed the data (or as much of it as will fit) into a curve point.
-        let data_slice: <GROUP as Group>::POINT = group
+        let data_slice = group
             .point()
             .embed(Some(data), &mut RandStream::default());
         let mut max: usize = group.point().embed_len();
@@ -148,10 +147,10 @@ impl Ticket {
         }
         let remainder = data[max..].to_vec();
         // ElGamal-encrypt the point to produce ciphertext (K,C).
-        let ephemeral_private: <<GROUP as Group>::POINT as Point>::SCALAR = group.scalar().pick(&mut RandStream::default()); // ephemeral private key
-        let ephemeral_public: <GROUP as Group>::POINT = group.point().mul(&ephemeral_private, None); // ephemeral DH public key
-        let secret: <GROUP as Group>::POINT = group.point().mul(&ephemeral_private, Some(pubkey)); // ephemeral DH shared secret
-        let cypher_text: <GROUP as Group>::POINT = secret.clone().add(&secret, &data_slice); // data blinded with secret
+        let ephemeral_private= group.scalar().pick(&mut RandStream::default()); // ephemeral private key
+        let ephemeral_public = group.point().mul(&ephemeral_private, None); // ephemeral DH public key
+        let secret = group.point().mul(&ephemeral_private, Some(pubkey)); // ephemeral DH shared secret
+        let cypher_text = secret.clone().add(&secret, &data_slice); // data blinded with secret
         (ephemeral_public, cypher_text, remainder)
     }
 
@@ -186,7 +185,7 @@ impl DeadDrop {
 
         // Decrypt the message one block at a time, push the decrypted message to the decrypted_msg vector.
         for i in 0..self.message.binaries.len() {
-            let dec_res: Result<Vec<u8>, group::PointError> = DeadDrop::decrypt(suite, &private_key, self.message.public_keys[i], self.message.binaries[i]);
+            let dec_res = DeadDrop::decrypt(suite, &private_key, self.message.public_keys[i], self.message.binaries[i]);
             match dec_res {
                 Ok(decrypted) => {
                     for i in 0..decrypted.len() {
@@ -206,9 +205,9 @@ impl DeadDrop {
         cipher_text: GROUP::POINT,
     ) -> Result<Vec<u8>, group::PointError> {
         // ElGamal-decrypt the ciphertext (K,C) to reproduce the message.
-        let secret: <GROUP as Group>::POINT = group.point().mul(prikey, Some(&ephemeral_key)); // regenerate shared secret
-        let point: <GROUP as Group>::POINT = group.point();
-        let message: <GROUP as Group>::POINT = point.sub(&cipher_text, &secret); // use to un-blind the message
+        let secret = group.point().mul(prikey, Some(&ephemeral_key)); // regenerate shared secret
+        let point = group.point();
+        let message = point.sub(&cipher_text, &secret); // use to un-blind the message
         return message.data();
     }
 }
