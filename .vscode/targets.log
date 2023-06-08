@@ -8,7 +8,7 @@ make: *** No rule to make target 'all'.  Stop.
 # This is free software: you are free to change and redistribute it.
 # There is NO WARRANTY, to the extent permitted by law.
 
-# Make data base, printed on Mon Jun  5 07:06:01 2023
+# Make data base, printed on Wed Jun  7 15:27:08 2023
 
 # Variables
 
@@ -47,7 +47,7 @@ VSCODE_CWD = /mnt/c/Users/TheMagicNacho/AppData/Local/Programs/Microsoft VS Code
 # default
 MAKE_HOST := x86_64-pc-linux-gnu
 # environment
-PATH = /home/themagicnacho/.vscode-server/bin/b3e4e68a0bc097f0ae7907b217c1119af9e03435/bin/remote-cli:/home/themagicnacho/.cargo/bin:/home/themagicnacho/.rd/bin:/home/themagicnacho/.nvm/versions/node/v20.2.0/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/usr/lib/wsl/lib:/mnt/c/WINDOWS/system32:/mnt/c/WINDOWS:/mnt/c/WINDOWS/System32/Wbem:/mnt/c/WINDOWS/System32/WindowsPowerShell/v1.0/:/mnt/c/WINDOWS/System32/OpenSSH/:/mnt/c/Program Files (x86)/NVIDIA Corporation/PhysX/Common:/mnt/c/Users/TheMagicNacho/AppData/Roaming/nvm:/mnt/c/Program Files/nodejs:/mnt/c/Program Files/Git/cmd:/mnt/c/Program Files/GitHub CLI/:/mnt/c/WINDOWS/system32:/mnt/c/WINDOWS:/mnt/c/WINDOWS/System32/Wbem:/mnt/c/WINDOWS/System32/WindowsPowerShell/v1.0/:/mnt/c/WINDOWS/System32/OpenSSH/:/mnt/c/Program Files/dotnet/:/Docker/host/bin:/mnt/c/Users/TheMagicNacho/AppData/Local/Microsoft/WindowsApps:/mnt/c/Users/TheMagicNacho/AppData/Local/GitHubDesktop/bin:/mnt/c/Users/TheMagicNacho/AppData/Local/Programs/Microsoft VS Code/bin:/mnt/c/Users/TheMagicNacho/AppData/Roaming/nvm:/mnt/c/Program Files/nodejs:/mnt/c/Users/TheMagicNacho/.dotnet/tools:/mnt/c/Users/TheMagicNacho/AppData/Local/Programs/oh-my-posh/bin:/mnt/c/Users/TheMagicNacho/AppData/Local/Microsoft/WindowsApps:/mnt/c/Users/TheMagicNacho/.dotnet/tools:/snap/bin:/usr/local/go/bin
+PATH = /home/themagicnacho/.vscode-server/bin/b3e4e68a0bc097f0ae7907b217c1119af9e03435/bin/remote-cli:/home/themagicnacho/.cargo/bin:/home/themagicnacho/.rd/bin:/home/themagicnacho/.nvm/versions/node/v20.2.0/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/usr/lib/wsl/lib:/mnt/c/WINDOWS/system32:/mnt/c/WINDOWS:/mnt/c/WINDOWS/System32/Wbem:/mnt/c/WINDOWS/System32/WindowsPowerShell/v1.0/:/mnt/c/WINDOWS/System32/OpenSSH/:/mnt/c/Program Files (x86)/NVIDIA Corporation/PhysX/Common:/mnt/c/Users/TheMagicNacho/AppData/Roaming/nvm:/mnt/c/Program Files/nodejs:/mnt/c/Program Files/Git/cmd:/mnt/c/Program Files/GitHub CLI/:/mnt/c/WINDOWS/system32:/mnt/c/WINDOWS:/mnt/c/WINDOWS/System32/Wbem:/mnt/c/WINDOWS/System32/WindowsPowerShell/v1.0/:/mnt/c/WINDOWS/System32/OpenSSH/:/mnt/c/Program Files/dotnet/:/mnt/c/Program Files/Docker/Docker/resources/bin:/mnt/c/Users/TheMagicNacho/AppData/Local/Microsoft/WindowsApps:/mnt/c/Users/TheMagicNacho/AppData/Local/GitHubDesktop/bin:/mnt/c/Users/TheMagicNacho/AppData/Local/Programs/Microsoft VS Code/bin:/mnt/c/Users/TheMagicNacho/AppData/Roaming/nvm:/mnt/c/Program Files/nodejs:/mnt/c/Users/TheMagicNacho/.dotnet/tools:/mnt/c/Users/TheMagicNacho/AppData/Local/Programs/oh-my-posh/bin:/mnt/c/Users/TheMagicNacho/AppData/Local/Microsoft/WindowsApps:/mnt/c/Users/TheMagicNacho/.dotnet/tools:/snap/bin:/usr/local/go/bin
 # environment
 XDG_RUNTIME_DIR = /mnt/wslg/runtime-dir
 # environment
@@ -55,7 +55,7 @@ NVM_BIN = /home/themagicnacho/.nvm/versions/node/v20.2.0/bin
 # environment
 ELECTRON_RUN_AS_NODE = 1
 # environment
-VSCODE_IPC_HOOK_CLI = /mnt/wslg/runtime-dir/vscode-ipc-6cd3eabf-3a40-470a-883e-1a00ba68d899.sock
+VSCODE_IPC_HOOK_CLI = /mnt/wslg/runtime-dir/vscode-ipc-11fcd25b-fa32-414f-adaf-6b2f30ee720c.sock
 # default
 .FEATURES := target-specific order-only second-expansion else-if shortest-stem undefine oneshell archives jobserver output-sync check-symlink load
 # automatic
@@ -69,7 +69,7 @@ PWD = /home/themagicnacho/dead-drop
 # default
 .LOADED := 
 # environment
-WSL_INTEROP = /run/WSL/1670_interop
+WSL_INTEROP = /run/WSL/125_interop
 # environment
 PULSE_SERVER = unix:/mnt/wslg/PulseServer
 # environment
@@ -279,6 +279,6 @@ down:
 # strcache performance: lookups = 43 / hit rate = 30%
 # hash-table stats:
 # Load=30/8192=0%, Rehash=0, Collisions=1/43=2%
-# Finished Make data base on Mon Jun  5 07:06:01 2023
+# Finished Make data base on Wed Jun  7 15:27:08 2023
 
  

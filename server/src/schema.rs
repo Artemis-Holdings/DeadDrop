@@ -1,7 +1,7 @@
 // @generated automatically by Diesel CLI.
 
 diesel::table! {
-    dead_drop (id) {
+    dead_drops (id) {
         id -> Uuid,
         title -> Varchar,
         msg -> Nullable<Bytea>,

@@ -1,4 +1,4 @@
-CREATE TABLE dead_drop (
+CREATE TABLE dead_drops (
     id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
     title VARCHAR NOT NULL,
     msg BYTEA,
