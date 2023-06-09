@@ -25,7 +25,7 @@ impl Controller {
         }
     }
 
-    pub fn switch(&self, ticket: Ticket) -> DeadDrop {
+    pub fn manage_action(&self, ticket: Ticket) -> ClientResponse {
         match ticket.action {
             "CREATE" => self.create(ticket),
             "READ" => self.read(ticket),

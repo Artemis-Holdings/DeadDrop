@@ -11,6 +11,11 @@ use kyber_rs::Scalar;
 use kyber_rs::Group;
 use serde::{Serialize, Deserialize};
 
+
+use rand::{thread_rng, Rng};
+use rand::distributions::Alphanumeric;
+use hex;
+
 // TODO: Change the attachment encryption algorithm, find something that is faster.
 // TODO: How do I turn the model into a return object? How do we want the return object to look?
 
@@ -31,6 +36,7 @@ pub struct Payload {
 /// - action : The action to be performed by the controller (CREATE, READ, UPDATE, DELETE). String must match CRUD exactly.
 #[derive(Debug)]
 pub struct Ticket{
+    pub din: String,
     pub title: String,
     pub message: String,
     pub password: String,
@@ -44,7 +50,7 @@ pub struct Ticket{
 /// - attachment : The binary file of the dead drop as a Payload.
 #[derive(Debug)]
 pub struct DeadDrop {
-    pub id: Uuid,
+    pub id: String,
     pub title: String,
     pub message: Payload,
     pub attachment: Payload,
@@ -52,10 +58,30 @@ pub struct DeadDrop {
     // updated_at: DateTime<Utc>,
 }
 
+/// The Ticket is an object created on behalf of the client. 
+/// This object contains all the information needed to create a dead drop. 
+/// Methods within contain the cryptographic logic to generate the dead drop.
+/// > NOTE: The instanciated ticket must be mutable. This is because the ticket will generate a din if none is provided.
+/// Example Implementation:
+/// ```
+///     let mut test_ticket = Ticket::new(
+///        req.din,
+///        req.title,
+///        req.message,
+///        req.password,
+///        req.action,
+///        req.attachment,
+///    );
+///    let dead_drop = test_ticket.generate_deaddrop();
+///    println!("dead_drop: {:?}", dead_drop);
+/// ```
+/// 
+    
 impl Ticket {
     //construct the ticket from the struct
-    pub fn new(title: String, message: String, password: String, action: String, attachment: Vec<u8>) -> Ticket {
+    pub fn new(din: String, title: String, message: String, password: String, action: String, attachment: Vec<u8>) -> Ticket {
         Ticket {
+            din: din,
             title: title,
             message: message,
             password: password,
@@ -66,9 +92,9 @@ impl Ticket {
 
 
     /// The `generate_deaddrop` method gnerates an encrypted dead drop from the properties of the ticket.
-    pub fn generate_deaddrop(&self) -> DeadDrop {
+    pub fn generate_deaddrop(&mut self) -> DeadDrop {
         // generate the id
-        let id = Uuid::new_v4();
+        let id = self.generate_id();
         // generate the payloads
         let (message, attachment) = self.generate_payload(&self.message, &self.attachment);
         // let attachment = self.attachment_payload(self.attachment);
@@ -81,6 +107,29 @@ impl Ticket {
         };
         // return the dead drop
         return dead_drop;
+    }
+
+    pub fn generate_id(&mut self) -> String {
+        let mut new_din = self.din.clone();
+
+        // check if self.din is empty
+        if self.din.is_empty() {
+            println!("Din is empty, generating new din" );
+            new_din = thread_rng()
+                .sample_iter(&Alphanumeric)
+                .take(5)
+                .map(char::from)
+                .collect();
+            self.din = new_din.clone();
+        }
+
+      
+        let mashed = format!("{}{}", new_din, self.password);
+
+        let mut hasher = Sha3_256::new();
+        hasher.update(mashed);
+        let hashed = hex::encode(hasher.finalize());
+        return String::from(hashed);
     }
 
     /// The `generate_payload` method generates a payload from a string.
@@ -158,7 +207,7 @@ impl Ticket {
 }
 
 impl DeadDrop {
-    fn new(id: Uuid, title: String, message: Payload, attachment: Payload) -> DeadDrop {
+    fn new(id: String, title: String, message: Payload, attachment: Payload) -> DeadDrop {
         DeadDrop {
             id: id,
             title: title,

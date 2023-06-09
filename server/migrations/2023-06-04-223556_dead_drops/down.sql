@@ -1,1 +1,1 @@
-DROP TABLE dead_drop;
+DROP TABLE dead_drops;

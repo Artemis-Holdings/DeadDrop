@@ -5,7 +5,7 @@ use dotenvy::dotenv;
 use std::env;
 use crate::factory;
 use dead_drop_server::schema::dead_drops;
-use uuid::Uuid;
+// use uuid::Uuid;
 use chrono::Utc;
 
 
@@ -15,8 +15,8 @@ use chrono::Utc;
 #[diesel(check_for_backend(diesel::pg::Pg))]
 #[derive(Queryable, Selectable, Insertable, AsChangeset)]
 pub struct DeadDropModel {
-    pub id: Uuid,
-    pub title: String,
+    pub id: String,
+    pub title: Option<String>,
     pub msg: Option<Vec<u8>>,
     pub att: Option<Vec<u8>>,
     pub created_at: chrono::NaiveDateTime,
@@ -27,6 +27,7 @@ pub struct DeadDropModel {
 pub struct Service;
 impl Service {
 
+
     fn establish_connection() -> PgConnection {
         dotenv().ok();
 
@@ -36,7 +37,8 @@ impl Service {
             .unwrap_or_else(|_| panic!("Error connecting to {}", database_url))
     }
 
-    pub fn create_deaddrop(dead_drop_to_write: factory::DeadDrop) -> DeadDropModel {
+
+    pub fn create_deaddrop(dead_drop_to_write: factory::DeadDrop) -> factory::DeadDrop {
         let connection = &mut Service::establish_connection();
 
         let now = Utc::now().naive_utc();
@@ -45,66 +47,72 @@ impl Service {
 
         let dead_drop_to_db = DeadDropModel {
             id: dead_drop_to_write.id,
-            title: dead_drop_to_write.title,
+            title: Some(dead_drop_to_write.title),
             msg: Some(msg_payload),
             att: Some(att_payload),
             created_at: now,
             updated_at: now,
         };
 
-        diesel::insert_into(dead_drops::table)
+        let model_from_db: DeadDropModel = diesel::insert_into(dead_drops::table)
             .values(&dead_drop_to_db)
             .get_result(connection)
-            .expect("Error saving new dead drop")
+            .expect("DeadDrop Error: Services - Error creating dead drop.");
+
+        return Self::model_to_factory(model_from_db);
     }
 
-    pub fn read_deaddrop(title: String) -> DeadDropModel {
+
+    pub fn read_deaddrop(id: String) -> factory::DeadDrop {
         let connection = &mut Service::establish_connection();
 
-        dead_drops::table
-            .filter(dead_drops::title.eq(title))
+        let model_from_db: DeadDropModel = dead_drops::table
+            .filter(dead_drops::id.eq(id))
             .first(connection)
-            .expect("Error reading dead drop")
+            .expect("DeadDrop Error: Services - Error reading dead drop.");
+
+        return Self::model_to_factory(model_from_db);
     }
 
 
-    // TODO:  There is an issue with the way the database handels multiple drops with the same title. Need to reconcile this.
-    pub fn update_deaddrop(dead_drop_to_update: factory::DeadDrop) -> DeadDropModel {
+    // NOTE: This cannot change a password. Need to look into that in the future.
+    pub fn update_deaddrop(dead_drop_to_update: factory::DeadDrop) -> factory::DeadDrop {
         let connection = &mut Service::establish_connection();
 
         let now = Utc::now().naive_utc();
         let msg_payload = bincode::serialize(&dead_drop_to_update.message).unwrap();
         let att_payload = bincode::serialize(&dead_drop_to_update.attachment).unwrap();
-        let remain_static: DeadDropModel = dead_drops::table
-            .filter(dead_drops::title.eq(&dead_drop_to_update.title))
-            .first(connection)
-            .expect("Error reading dead drop");
 
-
-        let dead_drop_to_db = DeadDropModel {
-            id: remain_static.id,
-            title: dead_drop_to_update.title,
-            msg: Some(msg_payload),
-            att: Some(att_payload),
-            created_at: remain_static.created_at,
-            updated_at: now,
-        };
-
-        diesel::update(
-            dead_drops::table.filter(
-                dead_drops::title.eq(dead_drop_to_db.title.clone())
+        let model_from_db: DeadDropModel = diesel::update( dead_drops::table.filter(
+                dead_drops::id.eq(dead_drop_to_update.id)
             ))
-            .set(dead_drop_to_db)
+            .set((
+                dead_drops::title.eq(dead_drop_to_update.title), 
+                dead_drops::msg.eq(msg_payload), 
+                dead_drops::att.eq(att_payload), 
+                dead_drops::updated_at.eq(now)))
             .get_result(connection)
-            .expect("Error updating dead drop")
+            .expect("DeadDrop Error: Services - Error updating dead drop.");
+
+        return Self::model_to_factory(model_from_db);
     }
 
-    pub fn delete_deaddrop(title: String) -> DeadDropModel {
+    pub fn delete_deaddrop(id: String) -> factory::DeadDrop {
         let connection = &mut Service::establish_connection();
 
-        diesel::delete(dead_drops::table.filter(dead_drops::title.eq(title)))
+        let model_from_db: DeadDropModel = diesel::delete(dead_drops::table.filter(dead_drops::id.eq(id)))
             .get_result(connection)
-            .expect("Error deleting dead drop")
+            .expect("DeadDrop Error: Services - Error deleting dead drop.");
+        return Self::model_to_factory(model_from_db);
+    }
+
+    fn model_to_factory(model: DeadDropModel) -> factory::DeadDrop {
+        factory::DeadDrop {
+            id: model.id,
+            title: model.title.unwrap(),
+            message: bincode::deserialize(&model.msg.unwrap()).unwrap(),
+            attachment: bincode::deserialize(&model.att.unwrap()).unwrap(),
+        }
     }
 
 }

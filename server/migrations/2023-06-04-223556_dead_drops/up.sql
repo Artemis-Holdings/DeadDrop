@@ -1,6 +1,6 @@
 CREATE TABLE dead_drops (
-    id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
-    title VARCHAR NOT NULL,
+    id VARCHAR PRIMARY KEY,
+    title VARCHAR,
     msg BYTEA,
     att BYTEA,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,

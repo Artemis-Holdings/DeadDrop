@@ -2,8 +2,8 @@
 
 diesel::table! {
     dead_drops (id) {
-        id -> Uuid,
-        title -> Varchar,
+        id -> Varchar,
+        title -> Nullable<Varchar>,
         msg -> Nullable<Bytea>,
         att -> Nullable<Bytea>,
         created_at -> Timestamp,
