@@ -2,8 +2,13 @@ use crate::factory::{Ticket, DeadDrop};
 use crate::service::Service;
 
 
-/// The controller manages the flow of actions and the majority of the business logic.
-/// Do not be confused by the service which handles all connections to the database.
+/// The controller manages the flow of actions for tickets.
+/// Do not be confused by the Service which handles all connections to the database.
+/// 
+/// The majority of business logic occurs here however encryption and object generation occurs in the factory.
+/// 
+/// Actions are passed through the header of the HTTP request,
+/// Actions avilable are: CREATE, READ, UPDATE, DELETE
 /// 
 
 pub struct Controller;
@@ -13,7 +18,7 @@ impl Controller {
     pub fn client_request(ticket: &mut Ticket) -> Ticket {
         match ticket.action.as_str() {
             "CREATE" => Controller::create(ticket),
-            // "READ" => self.read(ticket),
+            "READ" => Controller::read(ticket),
             // "UPDATE" => self.update(ticket),
             // "DELETE" => self.delete(ticket),
             _ => panic!("Invalid action"),
@@ -31,23 +36,9 @@ impl Controller {
         return output;
     }
 
-    // fn read(){
-    //         use self::schema::posts::dsl::*;
-
-    //     let connection = &mut establish_connection();
-    //     let results = posts
-    //         .filter(published.eq(true))
-    //         .limit(5)
-    //         .select(Post::as_select())
-    //         .load(connection)
-    //         .expect("Error loading posts");
-
-    //     println!("Displaying {} posts", results.len());
-    //     for post in results {
-    //         println!("{}", post.title);
-    //         println!("-----------\n");
-    //         println!("{}", post.body);
-    //     }
-    // }
+    fn read(ticket: &mut Ticket) -> Ticket {
+        let dead_drop = Service::read_deaddrop(ticket.generate_id());
+        return dead_drop.generate_ticket(ticket.password.clone());
+    }
 
 }
