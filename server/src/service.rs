@@ -4,7 +4,8 @@ use diesel::prelude::*;
 use dotenvy::dotenv;
 use std::env;
 use crate::factory;
-use dead_drop_server::schema::dead_drops;
+
+use crate::schema::dead_drops;
 // use uuid::Uuid;
 use chrono::Utc;
 

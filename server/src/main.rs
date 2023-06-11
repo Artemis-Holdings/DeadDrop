@@ -1,28 +1,34 @@
 #[macro_use] extern crate rocket;
 
 pub mod factory;
-mod models;
 pub mod service;
+pub mod controller;
+pub mod schema;
 
 
 // use bincode::de;
-use rocket::tokio::time::{sleep, Duration};
+use rocket::{tokio::{time::{sleep, Duration}, self}, response};
 use std::{io, path::{Path, PathBuf}};
 use rocket::{get, routes, response::Redirect, fs::NamedFile};
 use crate::factory::Ticket;
-// use crate::service::Service;
-// use crate::controller::Controller;
+use crate::controller::Controller;
 
+use std::io::Cursor;
 // use rocket::data::FromData;
 use rocket::request::Outcome;
 use rocket::http::Status;
 use rocket::Request;
 use rocket::request::FromRequest;
+// use rocket::fs::NamedFile;
 // use rocket::Data;
+// use rocket;
 use rocket::data::{Data, ToByteUnit, ByteUnit};
 // use rocket::request;
 use serde;
-use rocket::tokio;
+use rocket::response::status;
+
+use rocket::response::{Response, Responder};
+use core::iter::once;
 
 
 
@@ -36,16 +42,6 @@ pub struct ClientRequest {
     pub message: String,
     pub action: String,
 }
-
-#[derive(Debug)]
-#[derive(serde::Deserialize)]
-pub struct ClientResponse {
-    pub din: String,
-    pub title: String,
-    pub message: String,
-    pub attachment: String,
-}
-
 
 
 #[rocket::async_trait]
@@ -78,12 +74,55 @@ impl<'r> FromRequest<'r> for ClientRequest {
     }
 }
 
+struct ClientResponse {
+    din: String,
+    title: String,
+    message: String,
+    attachment: Vec<u8>,
+    notice: String,
+}
+impl ClientResponse {
+    fn bind_ticket(ticket: Ticket) -> Self {
+        // let payload = bincode::serialize(&ticket).unwrap();
+        Self {
+            din: ticket.din,
+            title: ticket.title,
+            message: ticket.message,
+            attachment: ticket.attachment,
+            notice: String::new(),
+        }
+    }
+}
 
-#[post("/api/deaddrop", data = "<data>")]
-async fn deaddrop(req: ClientRequest, data: Data<'_> ) -> String {
 
-    let attachment = stream_attachement(data).await.unwrap();
-    let mut ticket = Ticket::new(
+#[rocket::async_trait]
+impl<'r> Responder<'r, 'static> for ClientResponse {
+    fn respond_to(self, _: &'r Request<'_>) -> response::Result<'static> {
+
+
+
+        let res = Response::build()
+            .raw_header("server", "DeadDrop")
+            .raw_header("din", self.din)
+            .raw_header("title", self.title)
+            .raw_header("message", self.message)
+            .streamed_body( Cursor::new(self.attachment))
+            // .raw_header("attachment", Cursor::new(self.attachment))
+            .raw_header("notice", self.notice)
+            .finalize();
+        
+        Ok(res)
+    }
+
+}
+
+
+
+#[post("/api/deaddrop", data = "<body>")]
+async fn deaddrop(req: ClientRequest, body: Data<'_> ) -> ClientResponse {
+
+    let attachment = stream_attachement(body).await.unwrap();
+    let mut req = Ticket::new(
         req.din, 
         req.title, 
         req.password, 
@@ -92,13 +131,11 @@ async fn deaddrop(req: ClientRequest, data: Data<'_> ) -> String {
         attachment
     );
 
-    let controller = Controller::new();
-    let client_response = controller.manage_action(ticket);
+    let res = Controller::client_request(&mut req);
 
-
-    return format!(" ☠️ DEAD DROP ONLINE ☠️ \n Awaited for 1 second. \n ECHO: {} \n", "test");
-
+    ClientResponse::bind_ticket(res)
 }
+
 
 async fn stream_attachement(data: Data<'_>) -> Result<Vec<u8>, Vec<u8>> {
     let max_upload_size = "1MB".parse().unwrap();
@@ -111,7 +148,7 @@ async fn stream_attachement(data: Data<'_>) -> Result<Vec<u8>, Vec<u8>> {
         println!("Attachment is incomplete");
         return Err(Vec::new());
     }
-    
+
 }
 
 // SERVE REACT FILES

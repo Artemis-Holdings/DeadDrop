@@ -207,7 +207,7 @@ impl Ticket {
 }
 
 impl DeadDrop {
-    fn new(id: String, title: String, message: Payload, attachment: Payload) -> DeadDrop {
+    pub fn new(id: String, title: String, message: Payload, attachment: Payload) -> DeadDrop {
         DeadDrop {
             id: id,
             title: title,
@@ -217,9 +217,22 @@ impl DeadDrop {
             // updated_at: Utc::now(),
         }
     }
+    pub fn generate_ticket(&self, password: String) -> Ticket {
+        // generate the ticket
+        let ticket = Ticket {
+            din: self.id.clone(),
+            title: self.title.clone(),
+            message: self.message_decrypt(password.clone()),
+            attachment: self.attachment_decrypt(password),
+            action: "".to_string(),
+            password: "".to_string(),
+        };
+        // return the ticket
+        return ticket;
+    }
 
     /// The `msg_decrypt` method decrypts the dead drop message and returns a string.
-    pub fn msg_decrypt(&self, password: String) -> String {
+    fn message_decrypt(&self, password: String) -> String {
 
         // Generate a hash from a password to decrypt the message.
         let mut hasher = Sha3_256::new();
@@ -245,6 +258,38 @@ impl DeadDrop {
             }
         }
         return String::from_utf8(decrypted_msg).unwrap();
+    }
+
+    fn attachment_decrypt(&self, password: String) -> Vec<u8> {
+        
+        // Generate a hash from a password to decrypt the message.
+        let mut hasher = Sha3_256::new();
+        hasher.update(password); 
+        let password_hash = hasher.finalize();
+        
+        // Instanciate required objects and variables
+        // let dead_drop: Ticket = bincode::deserialize(&ticket_binary).unwrap(); // Deserialized from binary stream.
+        let suite: SuiteEd25519 = SuiteEd25519::new_blake3_sha256_ed25519(); 
+        let private_key: group::edwards25519::Scalar = suite.scalar().set_bytes(&password_hash); // Generate decryption key
+        let mut decrypted_file: Vec<u8> = Vec::new();
+
+        // Decrypt the message one block at a time, push the decrypted message to the decrypted_msg vector.
+        for i in 0..self.attachment.binaries.len() {
+            let dec_res = DeadDrop::decrypt(
+                suite, 
+                &private_key, 
+                self.attachment.public_keys[i], 
+                self.attachment.binaries[i]);
+            match dec_res {
+                Ok(decrypted) => {
+                    for i in 0..decrypted.len() {
+                    decrypted_file.push(decrypted[i]);
+                    }
+                },           
+                Err(err) => println!("Decryption failed: {:?}", err),
+            }
+        }
+        return decrypted_file;
     }
 
     fn decrypt<GROUP: Group>(
