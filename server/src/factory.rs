@@ -1,7 +1,4 @@
-// use chrono::{DateTime, Utc};
-use uuid::Uuid;
 use sha3::{Digest, Sha3_256};
-
 
 use kyber_rs::group::edwards25519::SuiteEd25519;
 use kyber_rs::util::random::RandStream;
@@ -17,7 +14,6 @@ use rand::distributions::Alphanumeric;
 use hex;
 
 // TODO: Change the attachment encryption algorithm, find something that is faster.
-// TODO: How do I turn the model into a return object? How do we want the return object to look?
 
 /// The payload struct contains the encrypted message and the public keys of the payload.
 /// Each property is of type `Vec<group::edwards25519::Point>`.
@@ -213,8 +209,6 @@ impl DeadDrop {
             title: title,
             message: message,
             attachment: attachment,
-            // created_at: Utc::now(),
-            // updated_at: Utc::now(),
         }
     }
     pub fn generate_ticket(&self, password: String) -> Ticket {

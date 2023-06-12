@@ -1,4 +1,4 @@
-use crate::factory::{Ticket, DeadDrop};
+use crate::factory::Ticket;
 use crate::service::Service;
 
 
@@ -10,7 +10,6 @@ use crate::service::Service;
 /// Actions are passed through the header of the HTTP request,
 /// Actions avilable are: CREATE, READ, UPDATE, DELETE
 /// 
-
 pub struct Controller;
 impl Controller {
 
@@ -19,8 +18,8 @@ impl Controller {
         match ticket.action.as_str() {
             "CREATE" => Controller::create(ticket),
             "READ" => Controller::read(ticket),
-            // "UPDATE" => self.update(ticket),
-            // "DELETE" => self.delete(ticket),
+            "UPDATE" => Controller::update(ticket),
+            "DELETE" => Controller::delete(ticket),
             _ => panic!("Invalid action"),
         }
 
@@ -31,14 +30,51 @@ impl Controller {
         let new = ticket.generate_deaddrop();
         let response = Service::create_deaddrop(new);
         let mut output = response.generate_ticket(ticket.password.clone());
-        output.din = ticket.din.clone();
 
+        Controller::redact(&mut output);
+        output.din = ticket.din.clone();
+        
         return output;
     }
 
     fn read(ticket: &mut Ticket) -> Ticket {
         let dead_drop = Service::read_deaddrop(ticket.generate_id());
-        return dead_drop.generate_ticket(ticket.password.clone());
+        let mut output = dead_drop.generate_ticket(ticket.password.clone());
+
+        output.din = String::from("");
+
+        return output;
     }
 
+    fn update(ticket: &mut Ticket) -> Ticket {
+        let updated = ticket.generate_deaddrop();
+        let response = Service::update_deaddrop(updated);
+        let mut output = response.generate_ticket(ticket.password.clone());
+
+        Controller::redact(&mut output);
+
+        return output;
+    }
+
+    
+    fn delete(ticket: &mut Ticket) -> Ticket {
+        let dead_drop = Service::delete_deaddrop(ticket.generate_id());
+        let mut output = dead_drop.generate_ticket(ticket.password.clone());
+
+        Controller::redact(&mut output);
+
+        return output;
+     }
+
+
+     /// The redact function is used to remove non-essential information from the ticket.
+     /// This reduces an attack surface and reduces overhead on the network.
+     /// 
+     fn redact(ticket: &mut Ticket) {
+        ticket.din = String::from("");
+        ticket.message = String::from("");
+        ticket.attachment = Vec::new();
+        ticket.title = String::from("");
+     }
 }
+

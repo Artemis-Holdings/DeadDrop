@@ -6,15 +6,14 @@ use std::env;
 use crate::factory;
 
 use crate::schema::dead_drops;
-// use uuid::Uuid;
 use chrono::Utc;
 
 
 
 #[derive(Debug)] // remove before flight
+#[derive(Queryable, Selectable, Insertable, AsChangeset)]
 #[diesel(table_name = dead_drops)]
 #[diesel(check_for_backend(diesel::pg::Pg))]
-#[derive(Queryable, Selectable, Insertable, AsChangeset)]
 pub struct DeadDropModel {
     pub id: String,
     pub title: Option<String>,
