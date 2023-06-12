@@ -5,7 +5,7 @@ pub mod service;
 pub mod controller;
 pub mod schema;
 use rocket::{tokio::{time::{sleep, Duration}}, response};
-use std::{io, path::{Path, PathBuf}};
+use std:: path::{Path, PathBuf};
 use rocket::{get, routes, response::Redirect, fs::NamedFile};
 use crate::factory::Ticket;
 use crate::controller::Controller;
@@ -18,6 +18,7 @@ use rocket::request::FromRequest;
 use rocket::data::Data;
 use serde;
 use rocket::response::status;
+use rocket::futures::io;
 
 use rocket::response::{Response, Responder};
 
@@ -71,14 +72,28 @@ struct ClientResponse {
     notice: String,
 }
 impl ClientResponse {
-    fn transmit(ticket: Ticket) -> Self {
-        Self {
-            din: ticket.din,
-            title: ticket.title,
-            message: ticket.message,
-            attachment: ticket.attachment,
-            notice: String::new(),
+    fn transmit(ticket: Result<Ticket, io::Error>) -> Self {
+        match ticket {
+            Ok(ticket) => {
+                Self {
+                    din: ticket.din,
+                    title: ticket.title,
+                    message: ticket.message,
+                    attachment: ticket.attachment,
+                    notice: "Success".to_string(),
+                }
+            },
+            Err(err) => {
+                Self {
+                    din: String::new(),
+                    title: String::new(),
+                    message: String::new(),
+                    attachment: Vec::new(),
+                    notice: err.to_string(),
+                }
+            }
         }
+
     }
 }
 
@@ -88,6 +103,7 @@ impl<'r> Responder<'r, 'static> for ClientResponse {
     fn respond_to(self, _: &'r Request<'_>) -> response::Result<'static> {
 
         let res = Response::build()
+            .status(Status::Ok)
             .raw_header("server", "DeadDrop")
             .raw_header("din", self.din)
             .raw_header("title", self.title)
@@ -98,8 +114,8 @@ impl<'r> Responder<'r, 'static> for ClientResponse {
         
         Ok(res)
     }
-
 }
+
 
 
 
@@ -165,4 +181,5 @@ ECHO: {} \n", echo
 fn rocket() -> _ {
     rocket::build()
         .mount("/", routes![index, build_dir, test, deaddrop])
+        // .register("/", catchers![err_500])
 }

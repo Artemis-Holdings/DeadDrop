@@ -1,3 +1,5 @@
+use rocket::futures::io;
+
 use crate::factory::Ticket;
 use crate::service::Service;
 
@@ -14,61 +16,92 @@ pub struct Controller;
 impl Controller {
 
 
-    pub fn client_request(ticket: &mut Ticket) -> Ticket {
+    pub fn client_request(ticket: &mut Ticket) -> Result<Ticket, io::Error> {
         match ticket.action.as_str() {
             "CREATE" => Controller::create(ticket),
             "READ" => Controller::read(ticket),
             "UPDATE" => Controller::update(ticket),
             "DELETE" => Controller::delete(ticket),
-            _ => panic!("Invalid action"),
+            _ => Err(io::Error::new(io::ErrorKind::Other, "Invalid action"))
         }
 
         
     }
 
-    fn create(ticket: &mut Ticket) -> Ticket {
-        let new = ticket.generate_deaddrop();
-        let response = Service::create_deaddrop(new);
-        let mut output = response.generate_ticket(ticket.password.clone());
+    fn create(ticket: &mut Ticket) -> Result<Ticket, io::Error> {
+        let to_write = ticket.generate_deaddrop();
 
-        Controller::redact(&mut output);
-        output.din = ticket.din.clone();
+        let result = Service::create_deaddrop(to_write)?
+            .generate_ticket(ticket.password.clone());
         
-        return output;
+        match result {
+            Ok(mut output) => {
+                Controller::redact(&mut output);
+                output.din = ticket.din.clone();
+                Ok(output)
+            },
+            Err(err) => Err(io::Error::new(io::ErrorKind::Other, err)),
+        }
     }
 
-    fn read(ticket: &mut Ticket) -> Ticket {
-        let dead_drop = Service::read_deaddrop(ticket.generate_id());
-        let mut output = dead_drop.generate_ticket(ticket.password.clone());
+    fn read(ticket: &mut Ticket) -> Result<Ticket, io::Error> {
+        let id = ticket.generate_id();
+        let password = ticket.password.clone();
 
-        output.din = String::from("");
+        let result = Service::read_deaddrop(id)?
+            .generate_ticket(password);
 
-        return output;
+        match result {
+            Ok(mut output) => {
+                output.din = String::from("");
+                Ok(output)
+            },
+            Err(err) => Err(io::Error::new(io::ErrorKind::Other, err)),
+        }
+
     }
 
-    fn update(ticket: &mut Ticket) -> Ticket {
+    fn update(ticket: &mut Ticket) -> Result<Ticket, std::io::Error> {
         let updated = ticket.generate_deaddrop();
-        let response = Service::update_deaddrop(updated);
-        let mut output = response.generate_ticket(ticket.password.clone());
+        let result = Service::update_deaddrop(updated)?
+            .generate_ticket(ticket.password.clone());
 
-        Controller::redact(&mut output);
-
-        return output;
+        match result {
+            Ok(mut output) => {
+                Controller::redact(&mut output);
+                Ok(output)
+            },
+            Err(err) => Err(io::Error::new(io::ErrorKind::Other, err)),
+        }
     }
 
     
-    fn delete(ticket: &mut Ticket) -> Ticket {
-        let dead_drop = Service::delete_deaddrop(ticket.generate_id());
-        let mut output = dead_drop.generate_ticket(ticket.password.clone());
+    fn delete(ticket: &mut Ticket) -> Result<Ticket, std::io::Error> {
 
-        Controller::redact(&mut output);
+        match Controller::read(ticket) {
+            Ok(_) => {
 
-        return output;
+                let result = Service::delete_deaddrop(ticket.generate_id())?
+                    .generate_ticket(ticket.password.clone());
+
+                match result {
+                    Ok(mut output) => {
+                        Controller::redact(&mut output);
+                        Ok(output)
+                    },
+                    Err(err) => Err(io::Error::new(io::ErrorKind::Other, err)),
+                }
+            },
+            Err(err) => return Err(err),
+        }
+
+
      }
 
 
      /// The redact function is used to remove non-essential information from the ticket.
      /// This reduces an attack surface and reduces overhead on the network.
+     /// If your method modifies the database, it should be redacted prior to returning.
      /// 
      fn redact(ticket: &mut Ticket) {
         ticket.din = String::from("");

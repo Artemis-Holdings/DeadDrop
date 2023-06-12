@@ -8,6 +8,7 @@ use kyber_rs::Scalar;
 use kyber_rs::Group;
 use serde::{Serialize, Deserialize};
 
+use rocket::futures::io;
 
 use rand::{thread_rng, Rng};
 use rand::distributions::Alphanumeric;
@@ -106,11 +107,9 @@ impl Ticket {
     }
 
     pub fn generate_id(&mut self) -> String {
-        let mut new_din = self.din.clone();
 
-        // check if self.din is empty
+        let mut new_din = self.din.clone();
         if self.din.is_empty() {
-            println!("Din is empty, generating new din" );
             new_din = thread_rng()
                 .sample_iter(&Alphanumeric)
                 .take(5)
@@ -119,8 +118,9 @@ impl Ticket {
             self.din = new_din.clone();
         }
 
-      
-        let mashed = format!("{}{}", new_din, self.password);
+        // TODO: Make this a config variable.
+        let salt = "SALT".to_string();
+        let mashed = format!("{}{}{}", new_din, self.password, salt);
 
         let mut hasher = Sha3_256::new();
         hasher.update(mashed);
@@ -211,7 +211,7 @@ impl DeadDrop {
             attachment: attachment,
         }
     }
-    pub fn generate_ticket(&self, password: String) -> Ticket {
+    pub fn generate_ticket(&self, password: String) -> Result<Ticket, io::Error> {
         // generate the ticket
         let ticket = Ticket {
             din: self.id.clone(),
@@ -222,7 +222,7 @@ impl DeadDrop {
             password: "".to_string(),
         };
         // return the ticket
-        return ticket;
+        return Ok(ticket); 
     }
 
     /// The `msg_decrypt` method decrypts the dead drop message and returns a string.
