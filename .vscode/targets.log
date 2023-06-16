@@ -8,214 +8,112 @@ make: *** No rule to make target 'all'.  Stop.
 # This is free software: you are free to change and redistribute it.
 # There is NO WARRANTY, to the extent permitted by law.
 
-# Make data base, printed on Sun Jun 11 19:13:20 2023
+# Make data base, printed on Wed Jun 14 06:27:00 2023
 
 # Variables
 
 # automatic
 <D = $(patsubst %/,%,$(dir $<))
-# environment
-RUBY_VERSION = ruby-3.1.4
 # automatic
 ?F = $(notdir $?)
+# environment
+WSLENV = VSCODE_WSL_EXT_LOCATION/up
 # default
 .SHELLFLAGS := -c
 # environment
-VSCODE_AGENT_FOLDER = /home/codespace/.vscode-remote
-# environment
-NODE_ROOT = /home/codespace/nvm
-# environment
-NVM_INC = /usr/local/share/nvm/versions/node/v19.9.0/include/node
+NVM_INC = /home/themagicnacho/.nvm/versions/node/v20.2.0/include/node
 # automatic
 ?D = $(patsubst %/,%,$(dir $?))
-# environment
-GRADLE_HOME = /usr/local/sdkman/candidates/gradle/current
-# environment
-rvm_path = /usr/local/rvm
-# environment
-JAVA_ROOT = /home/codespace/java
 # automatic
 @D = $(patsubst %/,%,$(dir $@))
 # automatic
 @F = $(notdir $@)
 # makefile
-CURDIR := /workspaces/dead-drop
-# environment
-DOCKER_BUILDKIT = 1
-# environment
-PYTHON_ROOT = /home/codespace/.python
+CURDIR := /home/themagicnacho/dead-drop
+# makefile (from 'Makefile', line 1)
+SHELL := /bin/bash
 # environment
 VSCODE_NLS_CONFIG = {"locale":"en","osLocale":"en","availableLanguages":{}}
 # environment
-GITHUB_CODESPACES_PORT_FORWARDING_DOMAIN = preview.app.github.dev
-# environment
-PROMPT_DIRTRIM = 4
-# environment
-_ = /usr/bin/cat
-# environment
-GITHUB_GRAPHQL_URL = https://api.github.com/graphql
-# environment
-RUBY_HOME = /usr/local/rvm/rubies/default
-# environment
-MAVEN_HOME = /usr/local/sdkman/candidates/maven/current
-# environment
-GITHUB_TOKEN = ghu_l1trcuBi0Ife5b4ACTbjEu78Oy9lmj0QcdlM
+_ = /home/themagicnacho/.vscode-server/bin/b380da4ef1ee00e224a15c1d4d9793e27c2b6302/node
 # makefile (from 'Makefile', line 1)
 MAKEFILE_LIST :=  Makefile
-# environment
-ENABLE_DYNAMIC_INSTALL = true
-# environment
-DEBUG = ,vs-ssh
 # 'override' directive
 GNUMAKEFLAGS := 
 # environment
-CONDA_DIR = /opt/conda
+XDG_DATA_DIRS = /usr/local/share:/usr/share:/var/lib/snapd/desktop
 # environment
-LESSOPEN = | /usr/bin/lesspipe %s
+VSCODE_CWD = /mnt/c/Users/TheMagicNacho/AppData/Local/Programs/Microsoft VS Code
+# default
+MAKE_HOST := x86_64-pc-linux-gnu
 # environment
-VSCODE_CWD = /vscode/bin/linux-x64/b380da4ef1ee00e224a15c1d4d9793e27c2b6302
+PATH = /home/themagicnacho/.vscode-server/bin/b380da4ef1ee00e224a15c1d4d9793e27c2b6302/bin/remote-cli:/home/themagicnacho/.cargo/bin:/home/themagicnacho/.rd/bin:/home/themagicnacho/.nvm/versions/node/v20.2.0/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/usr/lib/wsl/lib:/mnt/c/WINDOWS/system32:/mnt/c/WINDOWS:/mnt/c/WINDOWS/System32/Wbem:/mnt/c/WINDOWS/System32/WindowsPowerShell/v1.0/:/mnt/c/WINDOWS/System32/OpenSSH/:/mnt/c/Program Files (x86)/NVIDIA Corporation/PhysX/Common:/mnt/c/Users/TheMagicNacho/AppData/Roaming/nvm:/mnt/c/Program Files/nodejs:/mnt/c/Program Files/Git/cmd:/mnt/c/Program Files/GitHub CLI/:/mnt/c/WINDOWS/system32:/mnt/c/WINDOWS:/mnt/c/WINDOWS/System32/Wbem:/mnt/c/WINDOWS/System32/WindowsPowerShell/v1.0/:/mnt/c/WINDOWS/System32/OpenSSH/:/mnt/c/Program Files/dotnet/:/mnt/c/Program Files/Docker/Docker/resources/bin:/mnt/c/Users/TheMagicNacho/AppData/Local/Microsoft/WindowsApps:/mnt/c/Users/TheMagicNacho/AppData/Local/GitHubDesktop/bin:/mnt/c/Users/TheMagicNacho/AppData/Local/Programs/Microsoft VS Code/bin:/mnt/c/Users/TheMagicNacho/AppData/Roaming/nvm:/mnt/c/Program Files/nodejs:/mnt/c/Users/TheMagicNacho/.dotnet/tools:/mnt/c/Users/TheMagicNacho/AppData/Local/Programs/oh-my-posh/bin:/mnt/c/Users/TheMagicNacho/AppData/Local/Microsoft/WindowsApps:/mnt/c/Users/TheMagicNacho/.dotnet/tools:/snap/bin:/usr/local/go/bin
 # environment
-NVS_ROOT = /usr/local/nvs
+XDG_RUNTIME_DIR = /mnt/wslg/runtime-dir
 # environment
-DOTNET_SKIP_FIRST_TIME_EXPERIENCE = 1
-# environment
-PATH = /vscode/bin/linux-x64/b380da4ef1ee00e224a15c1d4d9793e27c2b6302/bin/remote-cli:/home/codespace/.local/bin:/usr/local/cargo/bin:/home/codespace/.dotnet:/home/codespace/nvm/current/bin:/home/codespace/.php/current/bin:/home/codespace/.python/current/bin:/home/codespace/java/current/bin:/home/codespace/.ruby/current/bin:/home/codespace/.local/bin:/usr/local/oryx:/usr/local/go/bin:/go/bin:/usr/local/sdkman/bin:/usr/local/sdkman/candidates/java/current/bin:/usr/local/sdkman/candidates/gradle/current/bin:/usr/local/sdkman/candidates/maven/current/bin:/usr/local/sdkman/candidates/ant/current/bin:/usr/local/rvm/gems/default/bin:/usr/local/rvm/gems/default@global/bin:/usr/local/rvm/rubies/default/bin:/usr/local/share/rbenv/bin:/opt/conda/bin:/usr/local/php/current/bin:/usr/local/python/current/bin:/usr/local/py-utils/bin:/usr/local/nvs:/usr/local/share/nvm/current/bin:/usr/local/hugo/bin:/usr/local/dotnet/current:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/local/rvm/bin
-# environment
-NVS_OS = linux
-# environment
-DYNAMIC_INSTALL_ROOT_DIR = /opt
-# environment
-CLOUDENV_ENVIRONMENT_ID = c6cfc75d-6d30-4187-bad3-ffe94dd6eca2
-# environment
-rvm_stored_umask = 0022
-# environment
-GITHUB_SERVER_URL = https://github.com
-# environment
-PIPX_BIN_DIR = /usr/local/py-utils/bin
-# environment
-PIPX_HOME = /usr/local/py-utils
-# environment
-SDKMAN_DIR = /usr/local/sdkman
-# environment
-SDKMAN_CANDIDATES_API = https://api.sdkman.io/2
-# environment
-GOPATH = /go
-# environment
-NVM_BIN = /usr/local/share/nvm/versions/node/v19.9.0/bin
-# environment
-HUGO_DIR = /usr/local/hugo/bin
-# environment
-SDKMAN_PLATFORM = linuxx64
-# environment
-NUGET_XMLDOC_MODE = skip
+NVM_BIN = /home/themagicnacho/.nvm/versions/node/v20.2.0/bin
 # environment
 ELECTRON_RUN_AS_NODE = 1
 # environment
-VSCODE_IPC_HOOK_CLI = /tmp/vscode-ipc-242eda46-e29a-4208-b22c-6a21c141a19b.sock
+VSCODE_IPC_HOOK_CLI = /mnt/wslg/runtime-dir/vscode-ipc-4f7bd943-d974-4cd4-852a-924504ff2db9.sock
 # default
 .FEATURES := target-specific order-only second-expansion else-if shortest-stem undefine oneshell archives jobserver output-sync check-symlink load
-# environment
-CODESPACES = true
-# environment
-CODESPACE_NAME = themagicnacho-crispy-space-fiesta-pq99qpg9j43v6q
-# environment
-LS_COLORS = 
 # automatic
 %F = $(notdir $%)
 # environment
-NVS_DIR = /usr/local/nvs
+DISPLAY = :0
 # environment
-PHP_PATH = /usr/local/php/current
+WSL2_GUI_APPS_ENABLED = 1
 # environment
-CONDA_SCRIPT = /opt/conda/etc/profile.d/conda.sh
-# environment
-ORYX_DIR = /usr/local/oryx
-# environment
-JUPYTERLAB_PATH = /home/codespace/.local/bin
-# environment
-rvm_bin_path = /usr/local/rvm/bin
-# environment
-ORYX_SDK_STORAGE_BASE_URL = https://oryx-cdn.microsoft.io
-# environment
-DOTNET_ROOT = /usr/local/dotnet/current
+PWD = /home/themagicnacho/dead-drop
 # default
 .LOADED := 
 # environment
-GEM_HOME = /usr/local/rvm/gems/ruby-3.1.4
+WSL_INTEROP = /run/WSL/4441_interop
 # environment
-RUSTUP_HOME = /usr/local/rustup
-# environment
-RVM_PATH = /usr/local/rvm
-# environment
-NPM_GLOBAL = /home/codespace/.npm-global
-# environment
-NVM_SYMLINK_CURRENT = true
+PULSE_SERVER = unix:/mnt/wslg/PulseServer
 # environment
 VSCODE_AMD_ENTRYPOINT = vs/workbench/api/node/extensionHostProcess
 # environment
-HOME = /home/codespace
+HOME = /home/themagicnacho
 # environment
-LESSCLOSE = /usr/bin/lesspipe %s %s
+POWERLINE_COMMAND = oh-my-posh
+# environment
+LOGNAME = themagicnacho
 # environment
 APPLICATION_INSIGHTS_NO_DIAGNOSTIC_CHANNEL = 1
 # environment
+CONDA_PROMPT_MODIFIER = false
+# environment
 NVM_CD_FLAGS = 
-# automatic
-+F = $(notdir $+)
-# environment
-ORYX_PREFER_USER_INSTALLED_SDKS = true
-# environment
-PYTHONIOENCODING = UTF-8
 # environment
 VSCODE_HANDLES_UNCAUGHT_ERRORS = true
 # automatic
 ^D = $(patsubst %/,%,$(dir $^))
 # environment
-HOSTNAME = codespaces-52b36c
-# environment
-ORYX_ENV_TYPE = vsonline-present
-# environment
 MAKELEVEL := 0
-# environment
-GEM_PATH = /usr/local/rvm/gems/ruby-3.1.4:/usr/local/rvm/gems/ruby-3.1.4@global
 # default
 MAKE = $(MAKE_COMMAND)
-# environment
-HUGO_ROOT = /home/codespace/.hugo
 # default
 MAKECMDGOALS := all
 # environment
-IRBRC = /usr/local/rvm/rubies/ruby-3.1.4/.irbrc
-# environment
 SHLVL = 1
 # environment
-RUBY_ROOT = /home/codespace/.ruby
-# environment
-MAVEN_ROOT = /home/codespace/.maven
-# environment
-JAVA_HOME = /usr/local/sdkman/candidates/java/current
+POSH_THEME = /mnt/c/Users/TheMagicNacho/AppData/Local/oh-my-posh/themes/amro.omp.json
 # default
 MAKE_VERSION := 4.2.1
 # environment
-GITHUB_CODESPACE_TOKEN = ABU465JBOTEL5KRHHT5ZLFDEQ3CWFANCNFSM4ADXBSMA
-# environment
-USER = codespace
-# environment
-NVS_USE_XZ = 1
+USER = themagicnacho
 # makefile
 .DEFAULT_GOAL := setup-dev
 # environment
-SHELL_LOGGED_IN = true
-# environment
-GOROOT = /usr/local/go
-# environment
-rvm_version = 1.29.12 (latest)
+NAME = Windows
 # automatic
 %D = $(patsubst %/,%,$(dir $%))
+# environment
+VSCODE_WSL_EXT_LOCATION = /mnt/c/Users/TheMagicNacho/.vscode/extensions/ms-vscode-remote.remote-wsl-0.79.4
 # default
 MAKE_COMMAND := make
-# environment
-OLDPWD = /vscode/bin/linux-x64/b380da4ef1ee00e224a15c1d4d9793e27c2b6302
 # default
 .VARIABLES := 
 # automatic
@@ -227,72 +125,43 @@ MFLAGS = -pqrR
 # automatic
 *D = $(patsubst %/,%,$(dir $*))
 # environment
-NVM_DIR = /usr/local/share/nvm
-# environment
-PYTHON_PATH = /usr/local/python/current
+NVM_DIR = /home/themagicnacho/.nvm
 # automatic
 +D = $(patsubst %/,%,$(dir $+))
-# makefile (from 'Makefile', line 1)
-SHELL := /bin/bash
 # environment
-rvm_user_install_flag = 0
-# environment
-BROWSER = /vscode/bin/linux-x64/b380da4ef1ee00e224a15c1d4d9793e27c2b6302/bin/helpers/browser.sh
-# environment
-PHP_ROOT = /home/codespace/.php
-# environment
-RepositoryName = dead-drop
-# environment
-NVS_HOME = /usr/local/nvs
+VSCODE_L10N_BUNDLE_LOCATION = 
+# automatic
++F = $(notdir $+)
 # environment
 VSCODE_HANDLES_SIGPIPE = true
-# environment
-DEBIAN_FLAVOR = focal-scm
-# environment
-GITHUB_USER = TheMagicNacho
 # default
 MAKEFILES := 
 # automatic
 <F = $(notdir $<)
 # environment
-SDKMAN_CANDIDATES_DIR = /usr/local/sdkman/candidates
-# environment
-GITHUB_API_URL = https://api.github.com
-# environment
-PWD = /workspaces/dead-drop
-# environment
 LC_ALL = C
 # environment
-CARGO_HOME = /usr/local/cargo
-# environment
-INTERNAL_VSCS_TARGET_URL = https://eastus2.online.visualstudio.com
-# environment
-GITHUB_REPOSITORY = Artemis-Holdings/dead-drop
+HOSTTYPE = x86_64
 # automatic
 ^F = $(notdir $^)
-# environment
-rvm_prefix = /usr/local
 # default
 SUFFIXES := 
+# environment
+WAYLAND_DISPLAY = wayland-0
 # default
 .INCLUDE_DIRS = /usr/include /usr/local/include /usr/include
-# environment
-rvm_loaded_flag = 1
 # default
 .RECIPEPREFIX := 
-# default
-MAKE_HOST := x86_64-pc-linux-gnu
-# environment
-RAILS_DEVELOPMENT_HOSTS = .githubpreview.dev,.preview.app.github.dev,.app.github.dev
 # environment
 LANG = C
 # environment
-ContainerVersion = 13
+TERM = xterm-256color
 # environment
-MY_RUBY_HOME = /usr/local/rvm/rubies/ruby-3.1.4
+WSL_DISTRO_NAME = Ubuntu
+# environment
+MOTD_SHOWN = update-motd
 # variable set hash-table stats:
- 
-# Load=139/1024=14%, Rehash=0, Collisions=14/165=8%
+# Load=74/1024=7%, Rehash=0, Collisions=4/100=4%
 
 # Pattern-specific Variable Values
 
@@ -300,9 +169,9 @@ MY_RUBY_HOME = /usr/local/rvm/rubies/ruby-3.1.4
 
 # Directories
 
-# . (device 1796, inode 50274): 15 files, no impossibilities.
+# . (device 2080, inode 1516024): 17 files, no impossibilities.
 
-# 15 files, no impossibilities in 1 directories.
+# 17 files, no impossibilities in 1 directories.
 
 # Implicit Rules
 
@@ -351,7 +220,7 @@ up:
 # Not a target:
 Makefile:
 #  Implicit rule search has been done.
-#  Last modified 2023-06-10 14:07:51.2868377
+#  Last modified 2023-05-14 20:38:21.113885765
 #  File has been updated.
 #  Successfully updated.
 
@@ -404,12 +273,12 @@ down:
 
 # No general ('VPATH' variable) search path.
 
-# strcache buffers: 1 (0) / strings = 29 / storage = 264 B / avg = 9 B
-# current buf: size = 8162 B / used = 264 B / count = 29 / avg = 9 B
+# strcache buffers: 1 (0) / strings = 31 / storage = 280 B / avg = 9 B
+# current buf: size = 8162 B / used = 280 B / count = 31 / avg = 9 B
 
-# strcache performance: lookups = 42 / hit rate = 30%
+# strcache performance: lookups = 44 / hit rate = 29%
 # hash-table stats:
-# Load=29/8192=0%, Rehash=0, Collisions=1/42=2%
-# Finished Make data base on Sun Jun 11 19:13:20 2023
+# Load=31/8192=0%, Rehash=0, Collisions=1/44=2%
+# Finished Make data base on Wed Jun 14 06:27:00 2023
 
  
