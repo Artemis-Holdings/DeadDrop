@@ -1,99 +1,114 @@
 {
 
     "init": {
-            "prompt": "Type [m] for message sharing, [f] for file sharing.",
+            "prompt": "Would you like to...\n[n] Make a new dead drop.\n[v] View a dead drop.\n [e] Edit a dead drop.\n [d] Delete a dead drop.",
             "inputHistory": [],
-            "validResponse": ["m", "f"]
+            "validResponse": ["n", "v", "e", "d"]
         },
     "message": [
         {
-            "prompt": "Would you like to...\n[n] Make a new message.\n[v] View a message.\n [e] Edit a message.\n[c] Change your password.\n[d] Delete a message.",
-            "inputHistory": ["m"],
-            "validResponse": ["n", "v", "e", "c", "d"]
+            "prompt": "Enter your dead drop a title.",
+            "inputHistory": ["n"],
+            "validResponse": ["title"]
         },
         {
-            "prompt": "Please type your desired message",
-            "inputHistory": ["m", "n"],
+            "prompt": "Please enter your desired message.",
+            "inputHistory": ["n", "title"],
             "validResponse": ["msg"]
         },
         {
             "prompt": "Your message has been staged, now enter your desired password",
-            "inputHistory": ["m", "n", "msg"],
+            "inputHistory": ["n", "title", "msg"],
             "validResponse": ["psw"]
         },
         {
-            "prompt": "Your password is set, type [s] to send your dead-drop mesage",
-            "inputHistory": ["m", "n", "msg", "psw"],
-            "validResponse": ["s", "sendNewMessage"]
+            "prompt": "Would you like to add an attachment [y/n]?",
+            "inputHistory": ["n", "title", "msg", "psw"],
+            "validResponse": ["attachment"]
         },
         {
-            "prompt": "Encrypting...",
-            "inputHistory": ["m", "n", "msg", "psw", "s"],
+            "prompt": "Your dead drop is staged, type [s] to send your dead-drop mesage",
+            "inputHistory": ["n", "title", "msg", "psw", "attachment"],
+            "validResponse": ["s", "sendNewDeaddrop"]
+        },
+        {
+            "prompt": "Encrypting",
+            "inputHistory": ["n", "title", "msg", "psw", "attachment", "s"],
             "validResponse": ["none"]
         },
         {
             "prompt": "Please input the message ID of the message you would like to view",
-            "inputHistory": ["m", "v"],
+            "inputHistory": ["v"],
             "validResponse": ["msgId"]
         },
         {
             "prompt": "Your message has been staged, please input the correct password",
-            "inputHistory": ["m", "v", "msgId"],
+            "inputHistory": ["v", "msgId"],
             "validResponse": ["psw"]
         },
         {
             "prompt": "Your password is set, type [s] to view the dead-drop message",
-            "inputHistory": ["m", "v", "msgId", "psw"],
+            "inputHistory": ["v", "msgId", "psw"],
             "validResponse": ["s", "sendViewMessage"]
         },
         {
-            "prompt": "Decrypting...",
-            "inputHistory": ["m", "v", "msgId", "psw", "s"],
+            "prompt": "Decrypting",
+            "inputHistory": ["v", "msgId", "psw", "s"],
             "validResponse": ["none"]
         },
         {
             "prompt": "Please input the message ID of the message you would like to delete",
-            "inputHistory": ["m", "d"],
+            "inputHistory": ["d"],
             "validResponse": ["msgId"]
         },
         {
             "prompt": "Your message has been staged for deletion, please input the correct password",
-            "inputHistory": ["m", "d", "msgId"],
+            "inputHistory": ["d", "msgId"],
             "validResponse": ["psw"]
         },
         {
             "prompt": "Password verified, type [s] to delete the dead-drop message",
-            "inputHistory": ["m", "d", "msgId", "psw"],
-            "validResponse": ["s"]
+            "inputHistory": ["d", "msgId", "psw"],
+            "validResponse": ["s", "sendDeleteMessage"]
         },
         {
-            "prompt": "Deleting...",
-            "inputHistory": ["m", "d", "msgId", "psw", "s"],
+            "prompt": "Deleting",
+            "inputHistory": ["d", "msgId", "psw", "s"],
             "validResponse": ["none"]
         },
         {
             "prompt": "Pleases input the message ID of the message you would like to edit",
-            "inputHistory": ["m", "e"],
+            "inputHistory": ["e"],
             "validResponse": ["msgId"]
         },
         {
-            "prompt": "Your message has been staged, please input the correct password",
-            "inputHistory": ["m", "e", "msgId"],
+            "prompt": "Please input the correct password",
+            "inputHistory": ["e", "msgId"],
             "validResponse": ["psw"]
         },
         {
-            "prompt": "Password verified, type your new message to update the dead-drop",
-            "inputHistory": ["m", "e", "msgId", "psw"],
+            "prompt": "Password verified, type your new title",
+            "inputHistory": ["e", "msgId", "psw"],
+            "validResponse": ["title"]
+        },
+        {
+            "prompt": "Type your new message",
+            "inputHistory": ["e", "msgId", "psw", "title"],
             "validResponse": ["msg"]
         },
         {
-            "prompt": "Your updated message has been staged, press [s] to submit.",
-            "inputHistory": ["m", "e", "msgId", "psw", "msg"],
-            "validResponse": ["s"]
+            "prompt": "Would you like to change or add an attachment [y/n]?",
+            "inputHistory": ["e", "msgId", "psw", "title", "msg"],
+            "validResponse": ["attachment"]
         },
         {
-            "prompt": "Encrypting message update...",
-            "inputHistory": ["m", "e", "msgId", "psw", "msg", "s"],
+            "prompt": "Your updated message has been staged, press [s] to submit.",
+            "inputHistory": ["e", "msgId", "psw", "title", "msg", "attachment"],
+            "validResponse": ["s", "sendEditMessage"]
+        },
+        {
+            "prompt": "Encrypting update",
+            "inputHistory": ["e", "msgId", "psw", "title", "msg", "attachment", "s"],
             "validResponse": ["none"]
         }
     ]    

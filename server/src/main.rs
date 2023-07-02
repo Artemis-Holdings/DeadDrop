@@ -186,8 +186,9 @@ struct ClientResponse {
     title: String,
     message: String,
     attachment: Vec<u8>,
-    notice: String,
+    notice: String
 }
+
 impl ClientResponse {
     fn transmit(ticket: Result<Ticket, io::Error>) -> Self {
         match ticket {
@@ -196,15 +197,15 @@ impl ClientResponse {
                 title: ticket.title,
                 message: ticket.message,
                 attachment: ticket.attachment,
-                notice: "Success".to_string(),
+                notice: "Success".to_string()
             },
             Err(err) => Self {
                 din: String::new(),
                 title: String::new(),
                 message: String::new(),
                 attachment: Vec::new(),
-                notice: err.to_string(),
-            },
+                notice: err.to_string()
+            }
         }
     }
 }
@@ -212,8 +213,12 @@ impl ClientResponse {
 impl<'r> Responder<'r, 'static> for ClientResponse {
     fn respond_to(self, _: &'r Request<'_>) -> response::Result<'static> {
         // TODO: Allow errors to change the status code.
+        let mut status = Status::Ok;
+        if self.notice != "Success" {
+            status = Status::BadRequest;
+        }
         let res = Response::build()
-            .status(Status::Ok)
+            .status(status)
             .raw_header("server", "DeadDrop")
             .raw_header("din", self.din)
             .raw_header("title", self.title)

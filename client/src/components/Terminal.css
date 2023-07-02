@@ -1,6 +1,6 @@
 /* @import url('https://drafts.csswg.org/css-ui-4/'); */
 
-.terminal {
+#terminal {
   background-color: black;
   color: red;
   height: 75%;
@@ -26,6 +26,7 @@
   padding: 0;
   border-style: none;
   outline: none;
+  float: left;
   background-color: black;
   color: red;
   resize: none;
