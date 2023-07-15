@@ -33,19 +33,21 @@ export default function TerminalRender() {
             message: message,
             password: password,
             action: action,
+            filename: file ? file.name : ""
         }
         
         var requestOptions = {
             method: 'POST',
             headers: headers,
-            body: file ? file: undefined
+            body: file ? file : undefined
         }
 
         let deaddropObj = {
             din: "",
             title: "",
             message: "",
-            notice: ""
+            notice: "",
+            filename: ""
         }
 
         fetch("/api/deaddrop", requestOptions)
@@ -62,8 +64,9 @@ export default function TerminalRender() {
             })
             .then((data) => {
                 if (data.size > 0) {
+                    console.log("name: ", deaddropObj.filename)
                     const aElement = document.createElement('a');
-                    aElement.setAttribute('download', deaddropObj.title);
+                    aElement.setAttribute('download', deaddropObj.filename);
                     const href = URL.createObjectURL(data);
                     aElement.href = href;
                     aElement.setAttribute('target', '_blank');
@@ -242,7 +245,7 @@ export default function TerminalRender() {
             </div>
             {!isLoading && <div style={{ float: "left" }}> user@dead-drop ~ % &nbsp; </div>}
             <input autoFocus id="input-dd" type={inputType} className="terminalInput" onBlur={(e) => e.currentTarget.focus()} style={{ visibility: isLoading ? 'hidden' : 'visible' }} onKeyDown={(e) => handleCommands(e)} />
-            <input id="file-input" type="file" ref={fileInputRef} onClick={e => setFileDialogueIsOpen(true)} onChange={e => { setFileDialogueIsOpen(false); setFile(new Blob([e.target.files[0]], {type: e.target.files[0].type}));}} style={{ display: 'block', visibility: 'hidden', width: 0, height: 0 }} />
+            <input id="file-input" type="file" ref={fileInputRef} onClick={e => setFileDialogueIsOpen(true)} onChange={e => { setFileDialogueIsOpen(false); setFile(e.target.files[0]);}} style={{ display: 'block', visibility: 'hidden', width: 0, height: 0 }} />
         </div>
     );
 

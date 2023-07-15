@@ -84,6 +84,7 @@ async fn deaddrop(req: ClientRequest, body: Data<'_>) -> ClientResponse {
                 req.password,
                 req.action,
                 attachment,
+                req.filename
             );
 
             let response = Controller::client_request(&mut req);
@@ -132,6 +133,7 @@ struct ClientRequest {
     pub password: String,
     pub message: String,
     pub action: String,
+    pub filename: String
 }
 #[rocket::async_trait]
 impl<'r> FromRequest<'r> for ClientRequest {
@@ -144,13 +146,14 @@ impl<'r> FromRequest<'r> for ClientRequest {
             let password = req.headers().get_one("password").unwrap().to_string();
             let message = req.headers().get_one("message").unwrap().to_string();
             let action = req.headers().get_one("action").unwrap().to_string();
-
+            let filename = req.headers().get_one("filename").unwrap().to_string();
             Ok(ClientRequest {
                 din,
                 title,
                 password,
                 message,
                 action,
+                filename
             })
         }
 
@@ -186,7 +189,8 @@ struct ClientResponse {
     title: String,
     message: String,
     attachment: Vec<u8>,
-    notice: String
+    notice: String,
+    filename: String
 }
 
 impl ClientResponse {
@@ -197,14 +201,16 @@ impl ClientResponse {
                 title: ticket.title,
                 message: ticket.message,
                 attachment: ticket.attachment,
-                notice: "Success".to_string()
+                notice: "Success".to_string(),
+                filename: ticket.filename
             },
             Err(err) => Self {
                 din: String::new(),
                 title: String::new(),
                 message: String::new(),
                 attachment: Vec::new(),
-                notice: err.to_string()
+                notice: err.to_string(),
+                filename: String::new()
             }
         }
     }
@@ -225,6 +231,7 @@ impl<'r> Responder<'r, 'static> for ClientResponse {
             .raw_header("message", self.message)
             .streamed_body(Cursor::new(self.attachment))
             .raw_header("notice", self.notice)
+            .raw_header("filename", self.filename)
             .finalize();
 
         Ok(res)

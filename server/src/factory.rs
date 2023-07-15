@@ -23,6 +23,7 @@ use rand::{thread_rng, Rng};
 pub struct Payload {
     pub binaries: Vec<group::edwards25519::Point>,
     pub public_keys: Vec<group::edwards25519::Point>,
+    pub file_type: String
 }
 
 /// The Ticket struct is a clear text object used to create the encrypted message.
@@ -40,6 +41,7 @@ pub struct Ticket {
     pub password: String,
     pub action: String,
     pub attachment: Vec<u8>,
+    pub filename: String
 }
 /// The DeadDrop struct is an ecrypted object comprising of payloads and metadata.
 /// - id : The id of the dead drop.
@@ -52,6 +54,7 @@ pub struct DeadDrop {
     pub title: String,
     pub message: Payload,
     pub attachment: Payload,
+    pub filename: String
 }
 
 /// The Ticket is an object created on behalf of the client.
@@ -82,6 +85,7 @@ impl Ticket {
         password: String,
         action: String,
         attachment: Vec<u8>,
+        filename: String
     ) -> Ticket {
         Ticket {
             din: din,
@@ -90,6 +94,7 @@ impl Ticket {
             password: password,
             action: action,
             attachment: attachment,
+            filename: filename
         }
     }
 
@@ -98,7 +103,7 @@ impl Ticket {
         // generate the id
         let id = self.generate_id();
         // generate the payloads
-        let (message, attachment) = self.generate_payloads(&self.message, &self.attachment);
+        let (message, attachment) = self.generate_payloads(&self.message, &self.attachment, &self.filename);
         // let attachment = self.attachment_payload(self.attachment);
         // generate the dead drop
         let dead_drop = DeadDrop {
@@ -106,6 +111,7 @@ impl Ticket {
             title: self.title.clone(),
             message: message,
             attachment: attachment,
+            filename: self.filename.clone()
         };
         // return the dead drop
         return dead_drop;
@@ -133,7 +139,7 @@ impl Ticket {
     }
 
     /// The `generate_payload` method generates a payload from a string.
-    fn generate_payloads(&self, msg: &String, att: &Vec<u8>) -> (Payload, Payload) {
+    fn generate_payloads(&self, msg: &String, att: &Vec<u8>, filename: &String) -> (Payload, Payload) {
         // Generate hash of password
         let mut hasher = Sha3_256::new();
         hasher.update(self.password.clone());
@@ -174,10 +180,12 @@ impl Ticket {
         let message = Payload {
             binaries: msg_encrypted.clone(),
             public_keys: msg_ephemeral_keys.clone(),
+            file_type: "msg".to_string()
         };
         let attachment = Payload {
             binaries: att_encrypted.clone(),
             public_keys: att_ephemeral_keys.clone(),
+            file_type: filename.to_string()
         };
         // return the payload
         return (message, attachment);
@@ -205,12 +213,13 @@ impl Ticket {
 }
 
 impl DeadDrop {
-    pub fn new(id: String, title: String, message: Payload, attachment: Payload) -> DeadDrop {
+    pub fn new(id: String, title: String, message: Payload, attachment: Payload, filename: String) -> DeadDrop {
         DeadDrop {
             id: id,
             title: title,
             message: message,
             attachment: attachment,
+            filename: filename
         }
     }
     pub fn generate_ticket(&self, password: String) -> Result<Ticket, io::Error> {
@@ -222,6 +231,7 @@ impl DeadDrop {
             attachment: self.attachment_decrypt(password),
             action: "".to_string(),
             password: "".to_string(),
+            filename: self.attachment.file_type.clone()
         };
         // return the ticket
         return Ok(ticket);
