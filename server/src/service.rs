@@ -133,6 +133,7 @@ impl Service {
             title: model.title.unwrap(),
             message: bincode::deserialize(&model.msg.unwrap()).unwrap(),
             attachment: bincode::deserialize(&model.att.unwrap()).unwrap(),
+            filename: "".to_string()
         }
     }
 }
