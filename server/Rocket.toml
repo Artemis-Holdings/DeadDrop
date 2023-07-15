@@ -1,2 +1,5 @@
 [default]
 port = 8080
+
+[release]
+address = "0.0.0.0"

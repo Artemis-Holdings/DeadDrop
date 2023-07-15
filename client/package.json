@@ -14,7 +14,7 @@
   },
   "scripts": {
     "start": "./node_modules/.bin/webpack serve --mode=development --config ./webpack.config --progress",
-    "build": "BUILD_PATH='../server/client_build' react-scripts build",
+    "build": "./node_modules/.bin/webpack --mode=production --config ./webpack.config.js -o ./build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
