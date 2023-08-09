@@ -50,7 +50,7 @@ module.exports = (env, argv) => {
 const baseConfig = {
   output: {
     // Configures where build directory is created
-    path: path.join(__dirname, '../server/client_build'),
+    path: path.join(__dirname, '../client/build'),
     // Configures what the minified build file is called
     filename: 'bundle.js',
     publicPath: "/",
