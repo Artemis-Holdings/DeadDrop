@@ -1,28 +1,26 @@
 SHELL := /bin/bash
 
 #  install all dependencies then cargo install cargo-watch
-setup-dev: 
-	@cd client && yarn install
+setup-dev-env: 
+	@DATABASE_URL=postgres://postgres:postgres@localhost:5432/dead_drop
+	@cd client && npm install && npm run dev-build
 	@cd server && cargo install --path .
 	@cargo install cargo-watch
 	@cargo install diesel_cli --no-default-features --features postgres
-	
 
-client-dep: ## Install dependencies
-	@cd DeadDrop.ui && yarn install
+setup-dev-database:
+	@docker run -d --name postgresql -e POSTGRESQL_PASSWORD=postgres -e POSTGRESQL_USERNAME=postgres -e POSTGRESQL_DATABASE=dead_drop -p 5432:5432 bitnami/postgresql:latest
+	@sleep 5
+	@cd server && diesel migration run
 
-server-dep: ## Get Go dependencies
-	@cd DeadDrop.api && yarn install
-
-# kill-servers:
-# 	@pkill -f bin/shepherd-server || true
 
 logs: ## Logs the backend
 	@docker logs -f shepherd_server
 
 ## Start Docker Containers
-up: 
-	@docker-compose --file docker-compose.yaml up -d --build
+# @docker-compose --file docker-compose.yaml up -d --build
+dev-up: setup-dev-env setup-dev-database ## Start Docker Containers 
+	@cd server && cargo watch -x run
 
 down:
 	@docker-compose down

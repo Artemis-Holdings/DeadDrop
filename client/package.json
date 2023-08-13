@@ -15,6 +15,7 @@
   "scripts": {
     "start": "./node_modules/.bin/webpack serve --mode=development --config ./webpack.config --progress",
     "build": "./node_modules/.bin/webpack --mode=production --config ./webpack.config.js -o ./build",
+    "dev-build": "./node_modules/.bin/webpack --mode=development --config ./webpack.config.js -o ../server/client_build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },

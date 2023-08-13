@@ -1,8 +1,0 @@
-make --dry-run --always-make --keep-going --print-directory
-make: Entering directory '/home/themagicnacho/dead-drop'
-cd client && yarn install
-cd server && cargo install --path .
-cargo install cargo-watch
-cargo install diesel_cli --no-default-features --features postgres
-make: Leaving directory '/home/themagicnacho/dead-drop'
- 

@@ -18,4 +18,5 @@ server/Cargo.lock
 server/target
 server/client_build
 
+/.vscode
 .env
